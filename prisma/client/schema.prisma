@@ -1,0 +1,248 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model mc_addons {
+  id                        Int                         @id @default(autoincrement())
+  filepath                  String?                     @db.Text
+  folderpath                String?                     @db.Text
+  uuid                      String?                     @db.Text
+  createdAt                 DateTime?                   @default(now()) @db.DateTime(0)
+  updatedAt                 DateTime?                   @default(now()) @db.DateTime(0)
+  mc_dependencies           mc_dependencies[]
+  mca_animation_controllers mca_animation_controllers[]
+  mca_animations            mca_animations[]
+  mca_attachables           mca_attachables[]
+  mca_entities              mca_entities[]
+  mca_entities_rp           mca_entities_rp[]
+  mca_fogs                  mca_fogs[]
+  mca_items                 mca_items[]
+  mca_loot_tables           mca_loot_tables[]
+  mca_models                mca_models[]
+  mca_other                 mca_other[]
+  mca_particles             mca_particles[]
+  mca_recipes               mca_recipes[]
+  mca_render_controllers    mca_render_controllers[]
+  mca_scripts               mca_scripts[]
+  mca_sounds                mca_sounds[]
+  mca_spawn_rules           mca_spawn_rules[]
+  mca_texts                 mca_texts[]
+  mca_textures              mca_textures[]
+  mca_trading               mca_trading[]
+  mca_ui                    mca_ui[]
+}
+
+model mc_dependencies {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  uuid      String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mc_dependencies_mca_id_fk_mc_addons_id")
+}
+
+model mca_animation_controllers {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_animation_controllers_mca_id_fk_mc_addons_id")
+}
+
+model mca_animations {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_animations_mca_id_fk_mc_addons_id")
+}
+
+model mca_attachables {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_attachables_mca_id_fk_mc_addons_id")
+}
+
+model mca_entities {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_entities_mca_id_fk_mc_addons_id")
+}
+
+model mca_entities_rp {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_entities_rp_mca_id_fk_mc_addons_id")
+}
+
+model mca_fogs {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_fogs_mca_id_fk_mc_addons_id")
+}
+
+model mca_items {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_items_mca_id_fk_mc_addons_id")
+}
+
+model mca_loot_tables {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_loot_tables_mca_id_fk_mc_addons_id")
+}
+
+model mca_models {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_models_mca_id_fk_mc_addons_id")
+}
+
+model mca_other {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_other_mca_id_fk_mc_addons_id")
+}
+
+model mca_particles {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_particles_mca_id_fk_mc_addons_id")
+}
+
+model mca_recipes {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_recipes_mca_id_fk_mc_addons_id")
+}
+
+model mca_render_controllers {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_render_controllers_mca_id_fk_mc_addons_id")
+}
+
+model mca_scripts {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_scripts_mca_id_fk_mc_addons_id")
+}
+
+model mca_sounds {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_sounds_mca_id_fk_mc_addons_id")
+}
+
+model mca_spawn_rules {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_spawn_rules_mca_id_fk_mc_addons_id")
+}
+
+model mca_texts {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_texts_mca_id_fk_mc_addons_id")
+}
+
+model mca_textures {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_textures_mca_id_fk_mc_addons_id")
+}
+
+model mca_trading {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_trading_mca_id_fk_mc_addons_id")
+}
+
+model mca_ui {
+  id        Int        @id @default(autoincrement())
+  mca_id    Int?
+  filename  String?    @db.Text
+  filepath  String?    @db.Text
+  mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
+
+  @@index([mca_id], name: "mca_ui_mca_id_fk_mc_addons_id")
+}
