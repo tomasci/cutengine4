@@ -16,24 +16,24 @@ const express_1 = __importDefault(require("express"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const path_1 = __importDefault(require("path"));
 const Upload_1 = __importDefault(require("./logic/Upload"));
-const Database_1 = require("./utils/Database/Database");
+const Database_1 = __importDefault(require("./utils/Database/Database"));
 const app = express_1.default();
 const port = 3000;
 app.use(express_fileupload_1.default({
     useTempFiles: true,
-    tempFileDir: path_1.default.resolve('./uploads/_temp')
+    tempFileDir: path_1.default.resolve("./uploads/_temp"),
 }));
-app.post('/upload', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/upload", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield Upload_1.default(req, res);
 }));
-app.post('/testdb', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const test = yield Database_1.db.$queryRaw('SELECT version()');
-    console.log(test);
-    res.json({
-        test
+app.get("/checkDatabase", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let version = yield Database_1.default.$queryRaw("SELECT version()");
+    return res.json({
+        version,
     });
 }));
 app.listen(port, () => {
+    console.log("Cute Engine 4");
     console.log(`Listening at: ${port}`);
 });
 //# sourceMappingURL=app.js.map

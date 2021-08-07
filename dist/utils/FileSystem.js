@@ -10,17 +10,17 @@ class FileSystem {
             fs_1.default.unlinkSync(path);
         }
         catch (e) {
-            console.log('Delete-file: ' + e);
+            console.log("Delete-file: " + e);
         }
     }
     static deleteFolder(path) {
         try {
             fs_1.default.rmdirSync(path, {
-                recursive: true
+                recursive: true,
             });
         }
         catch (e) {
-            console.log('Delete-folder: ' + e);
+            console.log("Delete-folder: " + e);
         }
     }
 }

@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.db = void 0;
 const client_1 = require("../../../prisma/client");
-exports.db = new client_1.PrismaClient();
-// it is just simple database wrapper
+const db = new client_1.PrismaClient();
+exports.default = db;
 //# sourceMappingURL=Database.js.map
