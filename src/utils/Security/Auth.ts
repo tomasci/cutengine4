@@ -5,6 +5,7 @@ import db from "../Database/Database"
 
 interface User {
 	id: number
+	token: string
 }
 
 declare global {
@@ -66,6 +67,7 @@ const auth = async (
 				let payload = JSON.parse(JSON.stringify(decoded))
 				req.user = {
 					id: payload.id,
+					token: token,
 				}
 
 				next()

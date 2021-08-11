@@ -1,14 +1,14 @@
 import express from "express"
 import auth from "../utils/Security/Auth"
-import signUp from "../logic/Users/NewUser"
+import signIn from "../logic/Users/SignIn"
+import signUp from "../logic/Users/SignUp"
+import getMe from "../logic/Users/GetMe"
+import logout from "../logic/Users/Logout"
 
 const router = express()
 
 router.post("/signin", async (req: express.Request, res: express.Response) => {
-	// post username & password
-	res.json({
-		r: "sign in",
-	})
+	await signIn(req, res)
 })
 
 router.post("/signup", async (req: express.Request, res: express.Response) => {
@@ -16,10 +16,15 @@ router.post("/signup", async (req: express.Request, res: express.Response) => {
 })
 
 router.get("/me", auth, async (req: express.Request, res: express.Response) => {
-	// reply with current user info
-	res.json({
-		r: "get me",
-	})
+	await getMe(req, res)
 })
+
+router.get(
+	"/logout",
+	auth,
+	async (req: express.Request, res: express.Response) => {
+		await logout(req, res)
+	}
+)
 
 export const usersRouter = router

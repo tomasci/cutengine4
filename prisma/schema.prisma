@@ -13,6 +13,9 @@ model mc_addons {
   filepath                  String?                     @db.Text
   folderpath                String?                     @db.Text
   uuid                      String?                     @db.Text
+  pack_name                 String?                     @db.Text
+  pack_version              String?                     @db.Text
+  pack_engine_version       String?                     @db.Text
   createdAt                 DateTime?                   @default(now()) @db.DateTime(0)
   updatedAt                 DateTime?                   @default(now()) @db.DateTime(0)
   mc_dependencies           mc_dependencies[]

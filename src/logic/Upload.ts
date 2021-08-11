@@ -34,7 +34,7 @@ async function Upload(req: express.Request, res: express.Response) {
 		return Response(res, {
 			error: true,
 			code: 500,
-			message: "File format error.",
+			message: "File format error. #202131108200500",
 		})
 	}
 
@@ -59,7 +59,7 @@ async function Upload(req: express.Request, res: express.Response) {
 			return Response(res, {
 				error: true,
 				code: 500,
-				message: "The archive may be damaged.",
+				message: "The archive may be damaged. #202131108200505",
 			})
 		}
 
@@ -83,13 +83,14 @@ async function Upload(req: express.Request, res: express.Response) {
 			return Response(res, {
 				error: true,
 				code: 500,
-				message: "This addon is already uploaded and saved.",
+				message:
+					"This addon is already uploaded and saved. #202131108200510",
 			})
 		}
 
 		// if addon saved - then save all the data
 		let savedFiles = await saveFiles(mcAddonID, extractedPath)
-		console.log(savedFiles)
+		// console.log(savedFiles)
 
 		return Response(
 			res,
@@ -165,6 +166,7 @@ async function saveAddon(fileName: string, fileHash: string): Promise<number> {
 	let search = await db.mc_addons.findMany({
 		where: {
 			uuid: manifest.header.uuid,
+			pack_version: manifest.header.version.join("."),
 		},
 	})
 
@@ -179,6 +181,9 @@ async function saveAddon(fileName: string, fileHash: string): Promise<number> {
 			filepath: fileName,
 			folderpath: fileHash,
 			uuid: manifest.header.uuid,
+			pack_name: manifest.header.name,
+			pack_version: manifest.header.version.join("."),
+			pack_engine_version: manifest.header.min_engine_version.join("."),
 		},
 	})
 

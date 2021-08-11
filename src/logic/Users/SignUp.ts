@@ -5,7 +5,7 @@ import {users} from "../../../prisma/client"
 import Utils from "../../utils/Utils"
 import bcrypt from "bcrypt"
 
-interface IUserData {
+interface ISignUpData {
 	username: string
 	password: string
 	email: string
@@ -14,24 +14,24 @@ interface IUserData {
 const saltRounds: number = Number(process.env.SALT_ROUNDS)
 
 async function signUp(req: express.Request, res: express.Response) {
-	let userData: IUserData = req.body
-	let empty: boolean = await isEmpty(userData)
+	let userData: ISignUpData = req.body
 
+	let empty: boolean = isEmpty(userData)
 	if (empty) {
 		return Response(res, {
 			error: true,
 			code: 500,
-			message: "Empty username, password or email.",
+			message: "Empty username, password or email. #202131108200410",
 		})
 	}
 
 	let exists: boolean = await isExists(userData.username)
-
 	if (exists) {
 		return Response(res, {
 			error: true,
 			code: 500,
-			message: "User with this username is already exists.",
+			message:
+				"User with this username is already exists. #202131108200415",
 		})
 	}
 
@@ -54,15 +54,15 @@ async function signUp(req: express.Request, res: express.Response) {
 	)
 }
 
-async function isEmpty(userData): Promise<boolean> {
+function isEmpty(userData: ISignUpData): boolean {
 	return (
-		Utils.isEmpty(userData.username) &&
-		Utils.isEmpty(userData.password) &&
+		Utils.isEmpty(userData.username) ||
+		Utils.isEmpty(userData.password) ||
 		Utils.isEmpty(userData.email)
 	)
 }
 
-async function isExists(username: string): Promise<boolean> {
+export async function isExists(username: string): Promise<boolean> {
 	let search = await db.users.count({
 		where: {
 			username: username,
