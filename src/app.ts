@@ -8,8 +8,6 @@ import bodyParser from "body-parser"
 
 import Upload from "./logic/Upload"
 import db from "./utils/Database/Database"
-import auth from "./utils/Security/Auth"
-import testRouter from "./router/TestRoutes"
 import {usersRouter} from "./routes/Users"
 
 dotenv.config()
