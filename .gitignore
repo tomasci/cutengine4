@@ -1,3 +1,8 @@
 node_modules
+dist
+uploads/_temp
+uploads/extracted
+uploads/source
+
 # Keep environment variables out of version control
 .env

@@ -36,6 +36,7 @@ model mc_addons {
   mca_textures              mca_textures[]
   mca_trading               mca_trading[]
   mca_ui                    mca_ui[]
+  site_post_attachments     site_post_attachments[]
 }
 
 model mc_dependencies {
@@ -245,4 +246,43 @@ model mca_ui {
   mc_addons mc_addons? @relation(fields: [mca_id], references: [id])
 
   @@index([mca_id], name: "mca_ui_mca_id_fk_mc_addons_id")
+}
+
+model site_post_attachments {
+  id          Int         @id @default(autoincrement())
+  post_id     Int?
+  mc_addon_id Int?
+  mc_addons   mc_addons?  @relation(fields: [mc_addon_id], references: [id])
+  site_posts  site_posts? @relation(fields: [post_id], references: [id])
+
+  @@index([mc_addon_id], name: "site_post_attachments_mc_addon_id_fk_mc_addons_id")
+  @@index([post_id], name: "site_post_attachments_post_id_fk_site_posts_id")
+}
+
+model site_posts {
+  id                    Int                     @id @default(autoincrement())
+  title                 String?                 @db.Text
+  content               String?                 @db.LongText
+  site_post_attachments site_post_attachments[]
+}
+
+model users {
+  id        Int       @id @default(autoincrement())
+  username  String?   @db.Text
+  hash      String?   @db.Text
+  email     String?   @db.Text
+  createdAt DateTime? @default(now()) @db.DateTime(0)
+  updatedAt DateTime? @default(now()) @db.DateTime(0)
+}
+
+model users_outdated_tokens {
+  id     Int                           @id @default(autoincrement())
+  token  String?                       @db.MediumText
+  reason users_outdated_tokens_reason? @default(expired)
+}
+
+enum users_outdated_tokens_reason {
+  expired
+  banned
+  logout
 }

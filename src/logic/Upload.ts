@@ -76,8 +76,8 @@ async function Upload(req: express.Request, res: express.Response) {
 		}
 
 		// if all "is" is "true" then work with files and DB
-		let mcAddonID: boolean = await saveAddon(fileName, fileHash)
-		if (!mcAddonID) {
+		let mcAddonID: boolean | number = await saveAddon(fileName, fileHash)
+		if (mcAddonID < 0) {
 			clear(zipPath, extractedPath)
 
 			return Response(res, {
@@ -86,6 +86,10 @@ async function Upload(req: express.Request, res: express.Response) {
 				message: "This addon is already uploaded and saved.",
 			})
 		}
+
+		// if addon saved - then save all the data
+		let savedFiles = await saveFiles(mcAddonID, extractedPath)
+		console.log(savedFiles)
 
 		return Response(
 			res,
@@ -146,7 +150,7 @@ function checkManifest(extractedPath: string): boolean {
 	}
 }
 
-async function saveAddon(fileName: string, fileHash: string): Promise<boolean> {
+async function saveAddon(fileName: string, fileHash: string): Promise<number> {
 	let extractedPath: string =
 		path.resolve("./uploads/extracted") + "/" + fileHash
 
@@ -166,7 +170,7 @@ async function saveAddon(fileName: string, fileHash: string): Promise<boolean> {
 
 	// if existed = return false
 	if (search.length > 0) {
-		return false
+		return -1
 	}
 
 	// insert addon itself
@@ -181,23 +185,27 @@ async function saveAddon(fileName: string, fileHash: string): Promise<boolean> {
 	// insert all dependencies
 	let dependencies = manifest.dependencies
 	let insertedDepsList = []
-	for (const dep of dependencies) {
-		let insertedDep = await db.mc_dependencies.create({
-			data: {
-				mca_id: mcAddon.id,
-				uuid: dep.uuid,
-			},
-		})
+	if (manifest && dependencies && dependencies.length > 0) {
+		for (const dep of dependencies) {
+			let insertedDep = await db.mc_dependencies.create({
+				data: {
+					mca_id: mcAddon.id,
+					uuid: dep.uuid,
+				},
+			})
 
-		insertedDepsList.push(insertedDep)
+			insertedDepsList.push(insertedDep)
+		}
 	}
 
-	return true
+	return mcAddon.id
 }
 
-function saveFiles(extractedPath: string) {
+async function saveFiles(mcAddonID: number, extractedPath: string) {
 	// todo: work with db
 	let fileList: string[] = findInDir(extractedPath, /\.json$/)
+
+	let results = []
 
 	for (let file of fileList) {
 		let path: string[] = file
@@ -207,13 +215,249 @@ function saveFiles(extractedPath: string) {
 			.split("/")
 			.filter(Boolean) // clear [' ', ''] (empty elements)
 
+		let fileName: string = path[path.length - 1]
+		let fileRelativePath: string = path.join("/")
+
 		if (path.length > 1) {
+			// json files in directories
 			let fileType: string = path[0]
-			let fileName: string = path[path.length - 1]
-			let fileRelativePath: string = path.join("/")
+
+			let result = await fileSwitcher(
+				mcAddonID,
+				fileType,
+				fileName,
+				fileRelativePath
+			)
+			results.push(result)
+		} else {
+			// else -> json files in root, manifest.json for example.
+			let fileType = "other"
+
+			let result = await fileSwitcher(
+				mcAddonID,
+				fileType,
+				fileName,
+				fileRelativePath
+			)
+
+			results.push(result)
 		}
-		// else -> json files in root, manifest.json for example.
 	}
+
+	return results
+}
+
+async function fileSwitcher(
+	mcAddonID: number,
+	fileType: string,
+	fileName: string,
+	fileRelativePath: string
+) {
+	let result
+
+	switch (fileType) {
+		case "entities":
+			result = await db.mca_entities.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "items":
+			result = await db.mca_items.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "loot_tables":
+			result = await db.mca_loot_tables.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "recipes":
+			result = await db.mca_recipes.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "scripts":
+			result = await db.mca_scripts.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "spawn_rules":
+			result = await db.mca_spawn_rules.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "trading":
+			result = await db.mca_trading.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "ui":
+			result = await db.mca_ui.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "textures":
+			result = await db.mca_textures.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "texts":
+			result = await db.mca_texts.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "sounds":
+			result = await db.mca_sounds.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "render_controllers":
+			result = await db.mca_render_controllers.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "particles":
+			result = await db.mca_particles.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "models":
+			result = await db.mca_models.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "fogs":
+			result = await db.mca_fogs.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "entity":
+			result = await db.mca_entities_rp.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "attachables":
+			result = await db.mca_attachables.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "animations":
+			result = await db.mca_animations.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		case "animation_controllers":
+			result = await db.mca_animation_controllers.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+
+		default:
+			result = await db.mca_other.create({
+				data: {
+					mca_id: mcAddonID,
+					filename: fileName,
+					filepath: fileRelativePath,
+				},
+			})
+			break
+	}
+
+	return result
 }
 
 export default Upload

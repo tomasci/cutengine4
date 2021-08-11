@@ -225,11 +225,42 @@ exports.Prisma.Mca_uiScalarFieldEnum = makeEnum({
   filepath: 'filepath'
 });
 
+exports.Prisma.Site_post_attachmentsScalarFieldEnum = makeEnum({
+  id: 'id',
+  post_id: 'post_id',
+  mc_addon_id: 'mc_addon_id'
+});
+
+exports.Prisma.Site_postsScalarFieldEnum = makeEnum({
+  id: 'id',
+  title: 'title',
+  content: 'content'
+});
+
+exports.Prisma.UsersScalarFieldEnum = makeEnum({
+  id: 'id',
+  username: 'username',
+  hash: 'hash',
+  email: 'email',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+});
+
+exports.Prisma.Users_outdated_tokensScalarFieldEnum = makeEnum({
+  id: 'id',
+  token: 'token',
+  reason: 'reason'
+});
+
 exports.Prisma.SortOrder = makeEnum({
   asc: 'asc',
   desc: 'desc'
 });
-
+exports.users_outdated_tokens_reason = makeEnum({
+  expired: 'expired',
+  banned: 'banned',
+  logout: 'logout'
+});
 
 exports.Prisma.ModelName = makeEnum({
   mc_addons: 'mc_addons',
@@ -253,7 +284,11 @@ exports.Prisma.ModelName = makeEnum({
   mca_texts: 'mca_texts',
   mca_textures: 'mca_textures',
   mca_trading: 'mca_trading',
-  mca_ui: 'mca_ui'
+  mca_ui: 'mca_ui',
+  site_post_attachments: 'site_post_attachments',
+  site_posts: 'site_posts',
+  users: 'users',
+  users_outdated_tokens: 'users_outdated_tokens'
 });
 
 /**

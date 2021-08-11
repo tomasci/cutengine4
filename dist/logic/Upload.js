@@ -80,7 +80,7 @@ function Upload(req, res) {
             }
             // if all "is" is "true" then work with files and DB
             let mcAddonID = yield saveAddon(fileName, fileHash);
-            if (!mcAddonID) {
+            if (mcAddonID < 0) {
                 clear(zipPath, extractedPath);
                 return Response_1.default(res, {
                     error: true,
@@ -88,6 +88,9 @@ function Upload(req, res) {
                     message: "This addon is already uploaded and saved.",
                 });
             }
+            // if addon saved - then save all the data
+            let savedFiles = yield saveFiles(mcAddonID, extractedPath);
+            console.log(savedFiles);
             return Response_1.default(res, {
                 error: false,
             }, {
@@ -147,7 +150,7 @@ function saveAddon(fileName, fileHash) {
         });
         // if existed = return false
         if (search.length > 0) {
-            return false;
+            return -1;
         }
         // insert addon itself
         let mcAddon = yield Database_1.default.mc_addons.create({
@@ -160,43 +163,237 @@ function saveAddon(fileName, fileHash) {
         // insert all dependencies
         let dependencies = manifest.dependencies;
         let insertedDepsList = [];
-        for (const dep of dependencies) {
-            let insertedDep = yield Database_1.default.mc_dependencies.create({
-                data: {
-                    mca_id: mcAddon.id,
-                    uuid: dep.uuid,
-                },
-            });
-            insertedDepsList.push(insertedDep);
+        if (manifest && dependencies && dependencies.length > 0) {
+            for (const dep of dependencies) {
+                let insertedDep = yield Database_1.default.mc_dependencies.create({
+                    data: {
+                        mca_id: mcAddon.id,
+                        uuid: dep.uuid,
+                    },
+                });
+                insertedDepsList.push(insertedDep);
+            }
         }
-        console.log({
-            addon: mcAddon,
-            dependencies: insertedDepsList,
-        });
-        return true;
-        // return {
-        // 	addon: mcAddon,
-        // 	dependencies: insertedDepsList
-        // }
+        return mcAddon.id;
     });
 }
-function saveFiles(extractedPath) {
-    // todo: work with db
-    let fileList = FindInDir_1.default(extractedPath, /\.json$/);
-    for (let file of fileList) {
-        let path = file
-            .toString()
-            .split(extractedPath)
-            .pop()
-            .split("/")
-            .filter(Boolean); // clear [' ', ''] (empty elements)
-        if (path.length > 1) {
-            let fileType = path[0];
+function saveFiles(mcAddonID, extractedPath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // todo: work with db
+        let fileList = FindInDir_1.default(extractedPath, /\.json$/);
+        let results = [];
+        for (let file of fileList) {
+            let path = file
+                .toString()
+                .split(extractedPath)
+                .pop()
+                .split("/")
+                .filter(Boolean); // clear [' ', ''] (empty elements)
             let fileName = path[path.length - 1];
             let fileRelativePath = path.join("/");
+            if (path.length > 1) {
+                // json files in directories
+                let fileType = path[0];
+                let result = yield fileSwitcher(mcAddonID, fileType, fileName, fileRelativePath);
+                results.push(result);
+            }
+            else {
+                // else -> json files in root, manifest.json for example.
+                let fileType = "other";
+                let result = yield fileSwitcher(mcAddonID, fileType, fileName, fileRelativePath);
+                results.push(result);
+            }
         }
-        // else -> json files in root, manifest.json for example.
-    }
+        return results;
+    });
+}
+function fileSwitcher(mcAddonID, fileType, fileName, fileRelativePath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let result;
+        switch (fileType) {
+            case "entities":
+                result = yield Database_1.default.mca_entities.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "items":
+                result = yield Database_1.default.mca_items.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "loot_tables":
+                result = yield Database_1.default.mca_loot_tables.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "recipes":
+                result = yield Database_1.default.mca_recipes.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "scripts":
+                result = yield Database_1.default.mca_scripts.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "spawn_rules":
+                result = yield Database_1.default.mca_spawn_rules.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "trading":
+                result = yield Database_1.default.mca_trading.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "ui":
+                result = yield Database_1.default.mca_ui.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "textures":
+                result = yield Database_1.default.mca_textures.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "texts":
+                result = yield Database_1.default.mca_texts.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "sounds":
+                result = yield Database_1.default.mca_sounds.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "render_controllers":
+                result = yield Database_1.default.mca_render_controllers.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "particles":
+                result = yield Database_1.default.mca_particles.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "models":
+                result = yield Database_1.default.mca_models.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "fogs":
+                result = yield Database_1.default.mca_fogs.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "entity":
+                result = yield Database_1.default.mca_entities_rp.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "attachables":
+                result = yield Database_1.default.mca_attachables.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "animations":
+                result = yield Database_1.default.mca_animations.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            case "animation_controllers":
+                result = yield Database_1.default.mca_animation_controllers.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+            default:
+                result = yield Database_1.default.mca_other.create({
+                    data: {
+                        mca_id: mcAddonID,
+                        filename: fileName,
+                        filepath: fileRelativePath,
+                    },
+                });
+                break;
+        }
+        return result;
+    });
 }
 exports.default = Upload;
 //# sourceMappingURL=Upload.js.map

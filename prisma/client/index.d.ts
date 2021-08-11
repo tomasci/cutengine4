@@ -255,6 +255,65 @@ export type mca_ui = {
   filepath: string | null
 }
 
+/**
+ * Model site_post_attachments
+ */
+
+export type site_post_attachments = {
+  id: number
+  post_id: number | null
+  mc_addon_id: number | null
+}
+
+/**
+ * Model site_posts
+ */
+
+export type site_posts = {
+  id: number
+  title: string | null
+  content: string | null
+}
+
+/**
+ * Model users
+ */
+
+export type users = {
+  id: number
+  username: string | null
+  hash: string | null
+  email: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
+}
+
+/**
+ * Model users_outdated_tokens
+ */
+
+export type users_outdated_tokens = {
+  id: number
+  token: string | null
+  reason: users_outdated_tokens_reason | null
+}
+
+
+/**
+ * Enums
+ */
+
+// Based on
+// https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
+
+export const users_outdated_tokens_reason: {
+  expired: 'expired',
+  banned: 'banned',
+  logout: 'logout'
+};
+
+export type users_outdated_tokens_reason = (typeof users_outdated_tokens_reason)[keyof typeof users_outdated_tokens_reason]
+
 
 /**
  * ##  Prisma Client ʲˢ
@@ -597,6 +656,46 @@ export class PrismaClient<
     * ```
     */
   get mca_ui(): Prisma.mca_uiDelegate<GlobalReject>;
+
+  /**
+   * `prisma.site_post_attachments`: Exposes CRUD operations for the **site_post_attachments** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Site_post_attachments
+    * const site_post_attachments = await prisma.site_post_attachments.findMany()
+    * ```
+    */
+  get site_post_attachments(): Prisma.site_post_attachmentsDelegate<GlobalReject>;
+
+  /**
+   * `prisma.site_posts`: Exposes CRUD operations for the **site_posts** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Site_posts
+    * const site_posts = await prisma.site_posts.findMany()
+    * ```
+    */
+  get site_posts(): Prisma.site_postsDelegate<GlobalReject>;
+
+  /**
+   * `prisma.users`: Exposes CRUD operations for the **users** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Users
+    * const users = await prisma.users.findMany()
+    * ```
+    */
+  get users(): Prisma.usersDelegate<GlobalReject>;
+
+  /**
+   * `prisma.users_outdated_tokens`: Exposes CRUD operations for the **users_outdated_tokens** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Users_outdated_tokens
+    * const users_outdated_tokens = await prisma.users_outdated_tokens.findMany()
+    * ```
+    */
+  get users_outdated_tokens(): Prisma.users_outdated_tokensDelegate<GlobalReject>;
 }
 
 export namespace Prisma {
@@ -988,7 +1087,11 @@ export namespace Prisma {
     mca_texts: 'mca_texts',
     mca_textures: 'mca_textures',
     mca_trading: 'mca_trading',
-    mca_ui: 'mca_ui'
+    mca_ui: 'mca_ui',
+    site_post_attachments: 'site_post_attachments',
+    site_posts: 'site_posts',
+    users: 'users',
+    users_outdated_tokens: 'users_outdated_tokens'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1407,6 +1510,7 @@ export namespace Prisma {
     mca_textures?: boolean | mca_texturesFindManyArgs
     mca_trading?: boolean | mca_tradingFindManyArgs
     mca_ui?: boolean | mca_uiFindManyArgs
+    site_post_attachments?: boolean | site_post_attachmentsFindManyArgs
   }
 
   export type mc_addonsInclude = {
@@ -1431,6 +1535,7 @@ export namespace Prisma {
     mca_textures?: boolean | mca_texturesFindManyArgs
     mca_trading?: boolean | mca_tradingFindManyArgs
     mca_ui?: boolean | mca_uiFindManyArgs
+    site_post_attachments?: boolean | site_post_attachmentsFindManyArgs
   }
 
   export type mc_addonsGetPayload<
@@ -1485,7 +1590,9 @@ export namespace Prisma {
         P extends 'mca_trading'
         ? Array < mca_tradingGetPayload<S['include'][P]>>  :
         P extends 'mca_ui'
-        ? Array < mca_uiGetPayload<S['include'][P]>>  : never
+        ? Array < mca_uiGetPayload<S['include'][P]>>  :
+        P extends 'site_post_attachments'
+        ? Array < site_post_attachmentsGetPayload<S['include'][P]>>  : never
   } 
     : 'select' extends U
     ? {
@@ -1532,7 +1639,9 @@ export namespace Prisma {
         P extends 'mca_trading'
         ? Array < mca_tradingGetPayload<S['select'][P]>>  :
         P extends 'mca_ui'
-        ? Array < mca_uiGetPayload<S['select'][P]>>  : never
+        ? Array < mca_uiGetPayload<S['select'][P]>>  :
+        P extends 'site_post_attachments'
+        ? Array < site_post_attachmentsGetPayload<S['select'][P]>>  : never
   } 
     : mc_addons
   : mc_addons
@@ -1913,6 +2022,8 @@ export namespace Prisma {
     mca_trading<T extends mca_tradingFindManyArgs = {}>(args?: Subset<T, mca_tradingFindManyArgs>): CheckSelect<T, PrismaPromise<Array<mca_trading>>, PrismaPromise<Array<mca_tradingGetPayload<T>>>>;
 
     mca_ui<T extends mca_uiFindManyArgs = {}>(args?: Subset<T, mca_uiFindManyArgs>): CheckSelect<T, PrismaPromise<Array<mca_ui>>, PrismaPromise<Array<mca_uiGetPayload<T>>>>;
+
+    site_post_attachments<T extends site_post_attachmentsFindManyArgs = {}>(args?: Subset<T, site_post_attachmentsFindManyArgs>): CheckSelect<T, PrismaPromise<Array<site_post_attachments>>, PrismaPromise<Array<site_post_attachmentsGetPayload<T>>>>;
 
     private get _document();
     /**
@@ -21245,6 +21356,3520 @@ export namespace Prisma {
 
 
   /**
+   * Model site_post_attachments
+   */
+
+
+  export type AggregateSite_post_attachments = {
+    _count: Site_post_attachmentsCountAggregateOutputType | null
+    count: Site_post_attachmentsCountAggregateOutputType | null
+    _avg: Site_post_attachmentsAvgAggregateOutputType | null
+    avg: Site_post_attachmentsAvgAggregateOutputType | null
+    _sum: Site_post_attachmentsSumAggregateOutputType | null
+    sum: Site_post_attachmentsSumAggregateOutputType | null
+    _min: Site_post_attachmentsMinAggregateOutputType | null
+    min: Site_post_attachmentsMinAggregateOutputType | null
+    _max: Site_post_attachmentsMaxAggregateOutputType | null
+    max: Site_post_attachmentsMaxAggregateOutputType | null
+  }
+
+  export type Site_post_attachmentsAvgAggregateOutputType = {
+    id: number | null
+    post_id: number | null
+    mc_addon_id: number | null
+  }
+
+  export type Site_post_attachmentsSumAggregateOutputType = {
+    id: number | null
+    post_id: number | null
+    mc_addon_id: number | null
+  }
+
+  export type Site_post_attachmentsMinAggregateOutputType = {
+    id: number | null
+    post_id: number | null
+    mc_addon_id: number | null
+  }
+
+  export type Site_post_attachmentsMaxAggregateOutputType = {
+    id: number | null
+    post_id: number | null
+    mc_addon_id: number | null
+  }
+
+  export type Site_post_attachmentsCountAggregateOutputType = {
+    id: number
+    post_id: number
+    mc_addon_id: number
+    _all: number
+  }
+
+
+  export type Site_post_attachmentsAvgAggregateInputType = {
+    id?: true
+    post_id?: true
+    mc_addon_id?: true
+  }
+
+  export type Site_post_attachmentsSumAggregateInputType = {
+    id?: true
+    post_id?: true
+    mc_addon_id?: true
+  }
+
+  export type Site_post_attachmentsMinAggregateInputType = {
+    id?: true
+    post_id?: true
+    mc_addon_id?: true
+  }
+
+  export type Site_post_attachmentsMaxAggregateInputType = {
+    id?: true
+    post_id?: true
+    mc_addon_id?: true
+  }
+
+  export type Site_post_attachmentsCountAggregateInputType = {
+    id?: true
+    post_id?: true
+    mc_addon_id?: true
+    _all?: true
+  }
+
+  export type Site_post_attachmentsAggregateArgs = {
+    /**
+     * Filter which site_post_attachments to aggregate.
+     * 
+    **/
+    where?: site_post_attachmentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of site_post_attachments to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<site_post_attachmentsOrderByInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: site_post_attachmentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` site_post_attachments from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` site_post_attachments.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned site_post_attachments
+    **/
+    _count?: true | Site_post_attachmentsCountAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_count`
+    **/
+    count?: true | Site_post_attachmentsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Site_post_attachmentsAvgAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_avg`
+    **/
+    avg?: Site_post_attachmentsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Site_post_attachmentsSumAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_sum`
+    **/
+    sum?: Site_post_attachmentsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Site_post_attachmentsMinAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_min`
+    **/
+    min?: Site_post_attachmentsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Site_post_attachmentsMaxAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_max`
+    **/
+    max?: Site_post_attachmentsMaxAggregateInputType
+  }
+
+  export type GetSite_post_attachmentsAggregateType<T extends Site_post_attachmentsAggregateArgs> = {
+        [P in keyof T & keyof AggregateSite_post_attachments]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSite_post_attachments[P]>
+      : GetScalarType<T[P], AggregateSite_post_attachments[P]>
+  }
+
+
+    
+    
+  export type Site_post_attachmentsGroupByArgs = {
+    where?: site_post_attachmentsWhereInput
+    orderBy?: Enumerable<site_post_attachmentsOrderByInput>
+    by: Array<Site_post_attachmentsScalarFieldEnum>
+    having?: site_post_attachmentsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Site_post_attachmentsCountAggregateInputType | true
+    _avg?: Site_post_attachmentsAvgAggregateInputType
+    _sum?: Site_post_attachmentsSumAggregateInputType
+    _min?: Site_post_attachmentsMinAggregateInputType
+    _max?: Site_post_attachmentsMaxAggregateInputType
+  }
+
+
+  export type Site_post_attachmentsGroupByOutputType = {
+    id: number
+    post_id: number | null
+    mc_addon_id: number | null
+    _count: Site_post_attachmentsCountAggregateOutputType | null
+    _avg: Site_post_attachmentsAvgAggregateOutputType | null
+    _sum: Site_post_attachmentsSumAggregateOutputType | null
+    _min: Site_post_attachmentsMinAggregateOutputType | null
+    _max: Site_post_attachmentsMaxAggregateOutputType | null
+  }
+
+  type GetSite_post_attachmentsGroupByPayload<T extends Site_post_attachmentsGroupByArgs> = Promise<
+    Array<
+      PickArray<Site_post_attachmentsGroupByOutputType, T['by']> & 
+        {
+          [P in ((keyof T) & (keyof Site_post_attachmentsGroupByOutputType))]: P extends '_count' 
+            ? T[P] extends boolean 
+              ? number 
+              : GetScalarType<T[P], Site_post_attachmentsGroupByOutputType[P]> 
+            : GetScalarType<T[P], Site_post_attachmentsGroupByOutputType[P]>
+        }
+      > 
+    >
+
+
+  export type site_post_attachmentsSelect = {
+    id?: boolean
+    post_id?: boolean
+    mc_addon_id?: boolean
+    mc_addons?: boolean | mc_addonsArgs
+    site_posts?: boolean | site_postsArgs
+  }
+
+  export type site_post_attachmentsInclude = {
+    mc_addons?: boolean | mc_addonsArgs
+    site_posts?: boolean | site_postsArgs
+  }
+
+  export type site_post_attachmentsGetPayload<
+    S extends boolean | null | undefined | site_post_attachmentsArgs,
+    U = keyof S
+      > = S extends true
+        ? site_post_attachments
+    : S extends undefined
+    ? never
+    : S extends site_post_attachmentsArgs | site_post_attachmentsFindManyArgs
+    ?'include' extends U
+    ? site_post_attachments  & {
+    [P in TrueKeys<S['include']>]: 
+          P extends 'mc_addons'
+        ? mc_addonsGetPayload<S['include'][P]> | null :
+        P extends 'site_posts'
+        ? site_postsGetPayload<S['include'][P]> | null : never
+  } 
+    : 'select' extends U
+    ? {
+    [P in TrueKeys<S['select']>]: P extends keyof site_post_attachments ?site_post_attachments [P]
+  : 
+          P extends 'mc_addons'
+        ? mc_addonsGetPayload<S['select'][P]> | null :
+        P extends 'site_posts'
+        ? site_postsGetPayload<S['select'][P]> | null : never
+  } 
+    : site_post_attachments
+  : site_post_attachments
+
+
+  type site_post_attachmentsCountArgs = Merge<
+    Omit<site_post_attachmentsFindManyArgs, 'select' | 'include'> & {
+      select?: Site_post_attachmentsCountAggregateInputType | true
+    }
+  >
+
+  export interface site_post_attachmentsDelegate<GlobalRejectSettings> {
+    /**
+     * Find zero or one Site_post_attachments that matches the filter.
+     * @param {site_post_attachmentsFindUniqueArgs} args - Arguments to find a Site_post_attachments
+     * @example
+     * // Get one Site_post_attachments
+     * const site_post_attachments = await prisma.site_post_attachments.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends site_post_attachmentsFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, site_post_attachmentsFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'site_post_attachments'> extends True ? CheckSelect<T, Prisma__site_post_attachmentsClient<site_post_attachments>, Prisma__site_post_attachmentsClient<site_post_attachmentsGetPayload<T>>> : CheckSelect<T, Prisma__site_post_attachmentsClient<site_post_attachments | null >, Prisma__site_post_attachmentsClient<site_post_attachmentsGetPayload<T> | null >>
+
+    /**
+     * Find the first Site_post_attachments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {site_post_attachmentsFindFirstArgs} args - Arguments to find a Site_post_attachments
+     * @example
+     * // Get one Site_post_attachments
+     * const site_post_attachments = await prisma.site_post_attachments.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends site_post_attachmentsFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, site_post_attachmentsFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'site_post_attachments'> extends True ? CheckSelect<T, Prisma__site_post_attachmentsClient<site_post_attachments>, Prisma__site_post_attachmentsClient<site_post_attachmentsGetPayload<T>>> : CheckSelect<T, Prisma__site_post_attachmentsClient<site_post_attachments | null >, Prisma__site_post_attachmentsClient<site_post_attachmentsGetPayload<T> | null >>
+
+    /**
+     * Find zero or more Site_post_attachments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {site_post_attachmentsFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Site_post_attachments
+     * const site_post_attachments = await prisma.site_post_attachments.findMany()
+     * 
+     * // Get first 10 Site_post_attachments
+     * const site_post_attachments = await prisma.site_post_attachments.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const site_post_attachmentsWithIdOnly = await prisma.site_post_attachments.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends site_post_attachmentsFindManyArgs>(
+      args?: SelectSubset<T, site_post_attachmentsFindManyArgs>
+    ): CheckSelect<T, PrismaPromise<Array<site_post_attachments>>, PrismaPromise<Array<site_post_attachmentsGetPayload<T>>>>
+
+    /**
+     * Create a Site_post_attachments.
+     * @param {site_post_attachmentsCreateArgs} args - Arguments to create a Site_post_attachments.
+     * @example
+     * // Create one Site_post_attachments
+     * const Site_post_attachments = await prisma.site_post_attachments.create({
+     *   data: {
+     *     // ... data to create a Site_post_attachments
+     *   }
+     * })
+     * 
+    **/
+    create<T extends site_post_attachmentsCreateArgs>(
+      args: SelectSubset<T, site_post_attachmentsCreateArgs>
+    ): CheckSelect<T, Prisma__site_post_attachmentsClient<site_post_attachments>, Prisma__site_post_attachmentsClient<site_post_attachmentsGetPayload<T>>>
+
+    /**
+     * Create many Site_post_attachments.
+     *     @param {site_post_attachmentsCreateManyArgs} args - Arguments to create many Site_post_attachments.
+     *     @example
+     *     // Create many Site_post_attachments
+     *     const site_post_attachments = await prisma.site_post_attachments.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends site_post_attachmentsCreateManyArgs>(
+      args?: SelectSubset<T, site_post_attachmentsCreateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Site_post_attachments.
+     * @param {site_post_attachmentsDeleteArgs} args - Arguments to delete one Site_post_attachments.
+     * @example
+     * // Delete one Site_post_attachments
+     * const Site_post_attachments = await prisma.site_post_attachments.delete({
+     *   where: {
+     *     // ... filter to delete one Site_post_attachments
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends site_post_attachmentsDeleteArgs>(
+      args: SelectSubset<T, site_post_attachmentsDeleteArgs>
+    ): CheckSelect<T, Prisma__site_post_attachmentsClient<site_post_attachments>, Prisma__site_post_attachmentsClient<site_post_attachmentsGetPayload<T>>>
+
+    /**
+     * Update one Site_post_attachments.
+     * @param {site_post_attachmentsUpdateArgs} args - Arguments to update one Site_post_attachments.
+     * @example
+     * // Update one Site_post_attachments
+     * const site_post_attachments = await prisma.site_post_attachments.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends site_post_attachmentsUpdateArgs>(
+      args: SelectSubset<T, site_post_attachmentsUpdateArgs>
+    ): CheckSelect<T, Prisma__site_post_attachmentsClient<site_post_attachments>, Prisma__site_post_attachmentsClient<site_post_attachmentsGetPayload<T>>>
+
+    /**
+     * Delete zero or more Site_post_attachments.
+     * @param {site_post_attachmentsDeleteManyArgs} args - Arguments to filter Site_post_attachments to delete.
+     * @example
+     * // Delete a few Site_post_attachments
+     * const { count } = await prisma.site_post_attachments.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends site_post_attachmentsDeleteManyArgs>(
+      args?: SelectSubset<T, site_post_attachmentsDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Site_post_attachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {site_post_attachmentsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Site_post_attachments
+     * const site_post_attachments = await prisma.site_post_attachments.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends site_post_attachmentsUpdateManyArgs>(
+      args: SelectSubset<T, site_post_attachmentsUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Site_post_attachments.
+     * @param {site_post_attachmentsUpsertArgs} args - Arguments to update or create a Site_post_attachments.
+     * @example
+     * // Update or create a Site_post_attachments
+     * const site_post_attachments = await prisma.site_post_attachments.upsert({
+     *   create: {
+     *     // ... data to create a Site_post_attachments
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Site_post_attachments we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends site_post_attachmentsUpsertArgs>(
+      args: SelectSubset<T, site_post_attachmentsUpsertArgs>
+    ): CheckSelect<T, Prisma__site_post_attachmentsClient<site_post_attachments>, Prisma__site_post_attachmentsClient<site_post_attachmentsGetPayload<T>>>
+
+    /**
+     * Count the number of Site_post_attachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {site_post_attachmentsCountArgs} args - Arguments to filter Site_post_attachments to count.
+     * @example
+     * // Count the number of Site_post_attachments
+     * const count = await prisma.site_post_attachments.count({
+     *   where: {
+     *     // ... the filter for the Site_post_attachments we want to count
+     *   }
+     * })
+    **/
+    count<T extends site_post_attachmentsCountArgs>(
+      args?: Subset<T, site_post_attachmentsCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Site_post_attachmentsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Site_post_attachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Site_post_attachmentsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Site_post_attachmentsAggregateArgs>(args: Subset<T, Site_post_attachmentsAggregateArgs>): PrismaPromise<GetSite_post_attachmentsAggregateType<T>>
+
+    /**
+     * Group by Site_post_attachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Site_post_attachmentsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends Site_post_attachmentsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: Site_post_attachmentsGroupByArgs['orderBy'] }
+        : { orderBy?: Site_post_attachmentsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, Site_post_attachmentsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSite_post_attachmentsGroupByPayload<T> : Promise<InputErrors>
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for site_post_attachments.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in 
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__site_post_attachmentsClient<T> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+    mc_addons<T extends mc_addonsArgs = {}>(args?: Subset<T, mc_addonsArgs>): CheckSelect<T, Prisma__mc_addonsClient<mc_addons | null >, Prisma__mc_addonsClient<mc_addonsGetPayload<T> | null >>;
+
+    site_posts<T extends site_postsArgs = {}>(args?: Subset<T, site_postsArgs>): CheckSelect<T, Prisma__site_postsClient<site_posts | null >, Prisma__site_postsClient<site_postsGetPayload<T> | null >>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+  // Custom InputTypes
+
+  /**
+   * site_post_attachments findUnique
+   */
+  export type site_post_attachmentsFindUniqueArgs = {
+    /**
+     * Select specific fields to fetch from the site_post_attachments
+     * 
+    **/
+    select?: site_post_attachmentsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: site_post_attachmentsInclude | null
+    /**
+     * Throw an Error if a site_post_attachments can't be found
+     * 
+    **/
+    rejectOnNotFound?: RejectOnNotFound
+    /**
+     * Filter, which site_post_attachments to fetch.
+     * 
+    **/
+    where: site_post_attachmentsWhereUniqueInput
+  }
+
+
+  /**
+   * site_post_attachments findFirst
+   */
+  export type site_post_attachmentsFindFirstArgs = {
+    /**
+     * Select specific fields to fetch from the site_post_attachments
+     * 
+    **/
+    select?: site_post_attachmentsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: site_post_attachmentsInclude | null
+    /**
+     * Throw an Error if a site_post_attachments can't be found
+     * 
+    **/
+    rejectOnNotFound?: RejectOnNotFound
+    /**
+     * Filter, which site_post_attachments to fetch.
+     * 
+    **/
+    where?: site_post_attachmentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of site_post_attachments to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<site_post_attachmentsOrderByInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for site_post_attachments.
+     * 
+    **/
+    cursor?: site_post_attachmentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` site_post_attachments from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` site_post_attachments.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of site_post_attachments.
+     * 
+    **/
+    distinct?: Enumerable<Site_post_attachmentsScalarFieldEnum>
+  }
+
+
+  /**
+   * site_post_attachments findMany
+   */
+  export type site_post_attachmentsFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the site_post_attachments
+     * 
+    **/
+    select?: site_post_attachmentsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: site_post_attachmentsInclude | null
+    /**
+     * Filter, which site_post_attachments to fetch.
+     * 
+    **/
+    where?: site_post_attachmentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of site_post_attachments to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<site_post_attachmentsOrderByInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing site_post_attachments.
+     * 
+    **/
+    cursor?: site_post_attachmentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` site_post_attachments from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` site_post_attachments.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<Site_post_attachmentsScalarFieldEnum>
+  }
+
+
+  /**
+   * site_post_attachments create
+   */
+  export type site_post_attachmentsCreateArgs = {
+    /**
+     * Select specific fields to fetch from the site_post_attachments
+     * 
+    **/
+    select?: site_post_attachmentsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: site_post_attachmentsInclude | null
+    /**
+     * The data needed to create a site_post_attachments.
+     * 
+    **/
+    data: XOR<site_post_attachmentsCreateInput, site_post_attachmentsUncheckedCreateInput>
+  }
+
+
+  /**
+   * site_post_attachments createMany
+   */
+  export type site_post_attachmentsCreateManyArgs = {
+    data: Enumerable<site_post_attachmentsCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * site_post_attachments update
+   */
+  export type site_post_attachmentsUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the site_post_attachments
+     * 
+    **/
+    select?: site_post_attachmentsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: site_post_attachmentsInclude | null
+    /**
+     * The data needed to update a site_post_attachments.
+     * 
+    **/
+    data: XOR<site_post_attachmentsUpdateInput, site_post_attachmentsUncheckedUpdateInput>
+    /**
+     * Choose, which site_post_attachments to update.
+     * 
+    **/
+    where: site_post_attachmentsWhereUniqueInput
+  }
+
+
+  /**
+   * site_post_attachments updateMany
+   */
+  export type site_post_attachmentsUpdateManyArgs = {
+    data: XOR<site_post_attachmentsUpdateManyMutationInput, site_post_attachmentsUncheckedUpdateManyInput>
+    where?: site_post_attachmentsWhereInput
+  }
+
+
+  /**
+   * site_post_attachments upsert
+   */
+  export type site_post_attachmentsUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the site_post_attachments
+     * 
+    **/
+    select?: site_post_attachmentsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: site_post_attachmentsInclude | null
+    /**
+     * The filter to search for the site_post_attachments to update in case it exists.
+     * 
+    **/
+    where: site_post_attachmentsWhereUniqueInput
+    /**
+     * In case the site_post_attachments found by the `where` argument doesn't exist, create a new site_post_attachments with this data.
+     * 
+    **/
+    create: XOR<site_post_attachmentsCreateInput, site_post_attachmentsUncheckedCreateInput>
+    /**
+     * In case the site_post_attachments was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<site_post_attachmentsUpdateInput, site_post_attachmentsUncheckedUpdateInput>
+  }
+
+
+  /**
+   * site_post_attachments delete
+   */
+  export type site_post_attachmentsDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the site_post_attachments
+     * 
+    **/
+    select?: site_post_attachmentsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: site_post_attachmentsInclude | null
+    /**
+     * Filter which site_post_attachments to delete.
+     * 
+    **/
+    where: site_post_attachmentsWhereUniqueInput
+  }
+
+
+  /**
+   * site_post_attachments deleteMany
+   */
+  export type site_post_attachmentsDeleteManyArgs = {
+    where?: site_post_attachmentsWhereInput
+  }
+
+
+  /**
+   * site_post_attachments without action
+   */
+  export type site_post_attachmentsArgs = {
+    /**
+     * Select specific fields to fetch from the site_post_attachments
+     * 
+    **/
+    select?: site_post_attachmentsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: site_post_attachmentsInclude | null
+  }
+
+
+
+  /**
+   * Model site_posts
+   */
+
+
+  export type AggregateSite_posts = {
+    _count: Site_postsCountAggregateOutputType | null
+    count: Site_postsCountAggregateOutputType | null
+    _avg: Site_postsAvgAggregateOutputType | null
+    avg: Site_postsAvgAggregateOutputType | null
+    _sum: Site_postsSumAggregateOutputType | null
+    sum: Site_postsSumAggregateOutputType | null
+    _min: Site_postsMinAggregateOutputType | null
+    min: Site_postsMinAggregateOutputType | null
+    _max: Site_postsMaxAggregateOutputType | null
+    max: Site_postsMaxAggregateOutputType | null
+  }
+
+  export type Site_postsAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type Site_postsSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type Site_postsMinAggregateOutputType = {
+    id: number | null
+    title: string | null
+    content: string | null
+  }
+
+  export type Site_postsMaxAggregateOutputType = {
+    id: number | null
+    title: string | null
+    content: string | null
+  }
+
+  export type Site_postsCountAggregateOutputType = {
+    id: number
+    title: number
+    content: number
+    _all: number
+  }
+
+
+  export type Site_postsAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type Site_postsSumAggregateInputType = {
+    id?: true
+  }
+
+  export type Site_postsMinAggregateInputType = {
+    id?: true
+    title?: true
+    content?: true
+  }
+
+  export type Site_postsMaxAggregateInputType = {
+    id?: true
+    title?: true
+    content?: true
+  }
+
+  export type Site_postsCountAggregateInputType = {
+    id?: true
+    title?: true
+    content?: true
+    _all?: true
+  }
+
+  export type Site_postsAggregateArgs = {
+    /**
+     * Filter which site_posts to aggregate.
+     * 
+    **/
+    where?: site_postsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of site_posts to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<site_postsOrderByInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: site_postsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` site_posts from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` site_posts.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned site_posts
+    **/
+    _count?: true | Site_postsCountAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_count`
+    **/
+    count?: true | Site_postsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Site_postsAvgAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_avg`
+    **/
+    avg?: Site_postsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Site_postsSumAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_sum`
+    **/
+    sum?: Site_postsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Site_postsMinAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_min`
+    **/
+    min?: Site_postsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Site_postsMaxAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_max`
+    **/
+    max?: Site_postsMaxAggregateInputType
+  }
+
+  export type GetSite_postsAggregateType<T extends Site_postsAggregateArgs> = {
+        [P in keyof T & keyof AggregateSite_posts]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSite_posts[P]>
+      : GetScalarType<T[P], AggregateSite_posts[P]>
+  }
+
+
+    
+    
+  export type Site_postsGroupByArgs = {
+    where?: site_postsWhereInput
+    orderBy?: Enumerable<site_postsOrderByInput>
+    by: Array<Site_postsScalarFieldEnum>
+    having?: site_postsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Site_postsCountAggregateInputType | true
+    _avg?: Site_postsAvgAggregateInputType
+    _sum?: Site_postsSumAggregateInputType
+    _min?: Site_postsMinAggregateInputType
+    _max?: Site_postsMaxAggregateInputType
+  }
+
+
+  export type Site_postsGroupByOutputType = {
+    id: number
+    title: string | null
+    content: string | null
+    _count: Site_postsCountAggregateOutputType | null
+    _avg: Site_postsAvgAggregateOutputType | null
+    _sum: Site_postsSumAggregateOutputType | null
+    _min: Site_postsMinAggregateOutputType | null
+    _max: Site_postsMaxAggregateOutputType | null
+  }
+
+  type GetSite_postsGroupByPayload<T extends Site_postsGroupByArgs> = Promise<
+    Array<
+      PickArray<Site_postsGroupByOutputType, T['by']> & 
+        {
+          [P in ((keyof T) & (keyof Site_postsGroupByOutputType))]: P extends '_count' 
+            ? T[P] extends boolean 
+              ? number 
+              : GetScalarType<T[P], Site_postsGroupByOutputType[P]> 
+            : GetScalarType<T[P], Site_postsGroupByOutputType[P]>
+        }
+      > 
+    >
+
+
+  export type site_postsSelect = {
+    id?: boolean
+    title?: boolean
+    content?: boolean
+    site_post_attachments?: boolean | site_post_attachmentsFindManyArgs
+  }
+
+  export type site_postsInclude = {
+    site_post_attachments?: boolean | site_post_attachmentsFindManyArgs
+  }
+
+  export type site_postsGetPayload<
+    S extends boolean | null | undefined | site_postsArgs,
+    U = keyof S
+      > = S extends true
+        ? site_posts
+    : S extends undefined
+    ? never
+    : S extends site_postsArgs | site_postsFindManyArgs
+    ?'include' extends U
+    ? site_posts  & {
+    [P in TrueKeys<S['include']>]: 
+          P extends 'site_post_attachments'
+        ? Array < site_post_attachmentsGetPayload<S['include'][P]>>  : never
+  } 
+    : 'select' extends U
+    ? {
+    [P in TrueKeys<S['select']>]: P extends keyof site_posts ?site_posts [P]
+  : 
+          P extends 'site_post_attachments'
+        ? Array < site_post_attachmentsGetPayload<S['select'][P]>>  : never
+  } 
+    : site_posts
+  : site_posts
+
+
+  type site_postsCountArgs = Merge<
+    Omit<site_postsFindManyArgs, 'select' | 'include'> & {
+      select?: Site_postsCountAggregateInputType | true
+    }
+  >
+
+  export interface site_postsDelegate<GlobalRejectSettings> {
+    /**
+     * Find zero or one Site_posts that matches the filter.
+     * @param {site_postsFindUniqueArgs} args - Arguments to find a Site_posts
+     * @example
+     * // Get one Site_posts
+     * const site_posts = await prisma.site_posts.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends site_postsFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, site_postsFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'site_posts'> extends True ? CheckSelect<T, Prisma__site_postsClient<site_posts>, Prisma__site_postsClient<site_postsGetPayload<T>>> : CheckSelect<T, Prisma__site_postsClient<site_posts | null >, Prisma__site_postsClient<site_postsGetPayload<T> | null >>
+
+    /**
+     * Find the first Site_posts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {site_postsFindFirstArgs} args - Arguments to find a Site_posts
+     * @example
+     * // Get one Site_posts
+     * const site_posts = await prisma.site_posts.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends site_postsFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, site_postsFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'site_posts'> extends True ? CheckSelect<T, Prisma__site_postsClient<site_posts>, Prisma__site_postsClient<site_postsGetPayload<T>>> : CheckSelect<T, Prisma__site_postsClient<site_posts | null >, Prisma__site_postsClient<site_postsGetPayload<T> | null >>
+
+    /**
+     * Find zero or more Site_posts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {site_postsFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Site_posts
+     * const site_posts = await prisma.site_posts.findMany()
+     * 
+     * // Get first 10 Site_posts
+     * const site_posts = await prisma.site_posts.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const site_postsWithIdOnly = await prisma.site_posts.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends site_postsFindManyArgs>(
+      args?: SelectSubset<T, site_postsFindManyArgs>
+    ): CheckSelect<T, PrismaPromise<Array<site_posts>>, PrismaPromise<Array<site_postsGetPayload<T>>>>
+
+    /**
+     * Create a Site_posts.
+     * @param {site_postsCreateArgs} args - Arguments to create a Site_posts.
+     * @example
+     * // Create one Site_posts
+     * const Site_posts = await prisma.site_posts.create({
+     *   data: {
+     *     // ... data to create a Site_posts
+     *   }
+     * })
+     * 
+    **/
+    create<T extends site_postsCreateArgs>(
+      args: SelectSubset<T, site_postsCreateArgs>
+    ): CheckSelect<T, Prisma__site_postsClient<site_posts>, Prisma__site_postsClient<site_postsGetPayload<T>>>
+
+    /**
+     * Create many Site_posts.
+     *     @param {site_postsCreateManyArgs} args - Arguments to create many Site_posts.
+     *     @example
+     *     // Create many Site_posts
+     *     const site_posts = await prisma.site_posts.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends site_postsCreateManyArgs>(
+      args?: SelectSubset<T, site_postsCreateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Site_posts.
+     * @param {site_postsDeleteArgs} args - Arguments to delete one Site_posts.
+     * @example
+     * // Delete one Site_posts
+     * const Site_posts = await prisma.site_posts.delete({
+     *   where: {
+     *     // ... filter to delete one Site_posts
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends site_postsDeleteArgs>(
+      args: SelectSubset<T, site_postsDeleteArgs>
+    ): CheckSelect<T, Prisma__site_postsClient<site_posts>, Prisma__site_postsClient<site_postsGetPayload<T>>>
+
+    /**
+     * Update one Site_posts.
+     * @param {site_postsUpdateArgs} args - Arguments to update one Site_posts.
+     * @example
+     * // Update one Site_posts
+     * const site_posts = await prisma.site_posts.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends site_postsUpdateArgs>(
+      args: SelectSubset<T, site_postsUpdateArgs>
+    ): CheckSelect<T, Prisma__site_postsClient<site_posts>, Prisma__site_postsClient<site_postsGetPayload<T>>>
+
+    /**
+     * Delete zero or more Site_posts.
+     * @param {site_postsDeleteManyArgs} args - Arguments to filter Site_posts to delete.
+     * @example
+     * // Delete a few Site_posts
+     * const { count } = await prisma.site_posts.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends site_postsDeleteManyArgs>(
+      args?: SelectSubset<T, site_postsDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Site_posts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {site_postsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Site_posts
+     * const site_posts = await prisma.site_posts.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends site_postsUpdateManyArgs>(
+      args: SelectSubset<T, site_postsUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Site_posts.
+     * @param {site_postsUpsertArgs} args - Arguments to update or create a Site_posts.
+     * @example
+     * // Update or create a Site_posts
+     * const site_posts = await prisma.site_posts.upsert({
+     *   create: {
+     *     // ... data to create a Site_posts
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Site_posts we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends site_postsUpsertArgs>(
+      args: SelectSubset<T, site_postsUpsertArgs>
+    ): CheckSelect<T, Prisma__site_postsClient<site_posts>, Prisma__site_postsClient<site_postsGetPayload<T>>>
+
+    /**
+     * Count the number of Site_posts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {site_postsCountArgs} args - Arguments to filter Site_posts to count.
+     * @example
+     * // Count the number of Site_posts
+     * const count = await prisma.site_posts.count({
+     *   where: {
+     *     // ... the filter for the Site_posts we want to count
+     *   }
+     * })
+    **/
+    count<T extends site_postsCountArgs>(
+      args?: Subset<T, site_postsCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Site_postsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Site_posts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Site_postsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Site_postsAggregateArgs>(args: Subset<T, Site_postsAggregateArgs>): PrismaPromise<GetSite_postsAggregateType<T>>
+
+    /**
+     * Group by Site_posts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Site_postsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends Site_postsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: Site_postsGroupByArgs['orderBy'] }
+        : { orderBy?: Site_postsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, Site_postsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSite_postsGroupByPayload<T> : Promise<InputErrors>
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for site_posts.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in 
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__site_postsClient<T> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+    site_post_attachments<T extends site_post_attachmentsFindManyArgs = {}>(args?: Subset<T, site_post_attachmentsFindManyArgs>): CheckSelect<T, PrismaPromise<Array<site_post_attachments>>, PrismaPromise<Array<site_post_attachmentsGetPayload<T>>>>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+  // Custom InputTypes
+
+  /**
+   * site_posts findUnique
+   */
+  export type site_postsFindUniqueArgs = {
+    /**
+     * Select specific fields to fetch from the site_posts
+     * 
+    **/
+    select?: site_postsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: site_postsInclude | null
+    /**
+     * Throw an Error if a site_posts can't be found
+     * 
+    **/
+    rejectOnNotFound?: RejectOnNotFound
+    /**
+     * Filter, which site_posts to fetch.
+     * 
+    **/
+    where: site_postsWhereUniqueInput
+  }
+
+
+  /**
+   * site_posts findFirst
+   */
+  export type site_postsFindFirstArgs = {
+    /**
+     * Select specific fields to fetch from the site_posts
+     * 
+    **/
+    select?: site_postsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: site_postsInclude | null
+    /**
+     * Throw an Error if a site_posts can't be found
+     * 
+    **/
+    rejectOnNotFound?: RejectOnNotFound
+    /**
+     * Filter, which site_posts to fetch.
+     * 
+    **/
+    where?: site_postsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of site_posts to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<site_postsOrderByInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for site_posts.
+     * 
+    **/
+    cursor?: site_postsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` site_posts from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` site_posts.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of site_posts.
+     * 
+    **/
+    distinct?: Enumerable<Site_postsScalarFieldEnum>
+  }
+
+
+  /**
+   * site_posts findMany
+   */
+  export type site_postsFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the site_posts
+     * 
+    **/
+    select?: site_postsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: site_postsInclude | null
+    /**
+     * Filter, which site_posts to fetch.
+     * 
+    **/
+    where?: site_postsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of site_posts to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<site_postsOrderByInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing site_posts.
+     * 
+    **/
+    cursor?: site_postsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` site_posts from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` site_posts.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<Site_postsScalarFieldEnum>
+  }
+
+
+  /**
+   * site_posts create
+   */
+  export type site_postsCreateArgs = {
+    /**
+     * Select specific fields to fetch from the site_posts
+     * 
+    **/
+    select?: site_postsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: site_postsInclude | null
+    /**
+     * The data needed to create a site_posts.
+     * 
+    **/
+    data: XOR<site_postsCreateInput, site_postsUncheckedCreateInput>
+  }
+
+
+  /**
+   * site_posts createMany
+   */
+  export type site_postsCreateManyArgs = {
+    data: Enumerable<site_postsCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * site_posts update
+   */
+  export type site_postsUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the site_posts
+     * 
+    **/
+    select?: site_postsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: site_postsInclude | null
+    /**
+     * The data needed to update a site_posts.
+     * 
+    **/
+    data: XOR<site_postsUpdateInput, site_postsUncheckedUpdateInput>
+    /**
+     * Choose, which site_posts to update.
+     * 
+    **/
+    where: site_postsWhereUniqueInput
+  }
+
+
+  /**
+   * site_posts updateMany
+   */
+  export type site_postsUpdateManyArgs = {
+    data: XOR<site_postsUpdateManyMutationInput, site_postsUncheckedUpdateManyInput>
+    where?: site_postsWhereInput
+  }
+
+
+  /**
+   * site_posts upsert
+   */
+  export type site_postsUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the site_posts
+     * 
+    **/
+    select?: site_postsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: site_postsInclude | null
+    /**
+     * The filter to search for the site_posts to update in case it exists.
+     * 
+    **/
+    where: site_postsWhereUniqueInput
+    /**
+     * In case the site_posts found by the `where` argument doesn't exist, create a new site_posts with this data.
+     * 
+    **/
+    create: XOR<site_postsCreateInput, site_postsUncheckedCreateInput>
+    /**
+     * In case the site_posts was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<site_postsUpdateInput, site_postsUncheckedUpdateInput>
+  }
+
+
+  /**
+   * site_posts delete
+   */
+  export type site_postsDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the site_posts
+     * 
+    **/
+    select?: site_postsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: site_postsInclude | null
+    /**
+     * Filter which site_posts to delete.
+     * 
+    **/
+    where: site_postsWhereUniqueInput
+  }
+
+
+  /**
+   * site_posts deleteMany
+   */
+  export type site_postsDeleteManyArgs = {
+    where?: site_postsWhereInput
+  }
+
+
+  /**
+   * site_posts without action
+   */
+  export type site_postsArgs = {
+    /**
+     * Select specific fields to fetch from the site_posts
+     * 
+    **/
+    select?: site_postsSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: site_postsInclude | null
+  }
+
+
+
+  /**
+   * Model users
+   */
+
+
+  export type AggregateUsers = {
+    _count: UsersCountAggregateOutputType | null
+    count: UsersCountAggregateOutputType | null
+    _avg: UsersAvgAggregateOutputType | null
+    avg: UsersAvgAggregateOutputType | null
+    _sum: UsersSumAggregateOutputType | null
+    sum: UsersSumAggregateOutputType | null
+    _min: UsersMinAggregateOutputType | null
+    min: UsersMinAggregateOutputType | null
+    _max: UsersMaxAggregateOutputType | null
+    max: UsersMaxAggregateOutputType | null
+  }
+
+  export type UsersAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type UsersSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type UsersMinAggregateOutputType = {
+    id: number | null
+    username: string | null
+    hash: string | null
+    email: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UsersMaxAggregateOutputType = {
+    id: number | null
+    username: string | null
+    hash: string | null
+    email: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UsersCountAggregateOutputType = {
+    id: number
+    username: number
+    hash: number
+    email: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type UsersAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type UsersSumAggregateInputType = {
+    id?: true
+  }
+
+  export type UsersMinAggregateInputType = {
+    id?: true
+    username?: true
+    hash?: true
+    email?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UsersMaxAggregateInputType = {
+    id?: true
+    username?: true
+    hash?: true
+    email?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UsersCountAggregateInputType = {
+    id?: true
+    username?: true
+    hash?: true
+    email?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type UsersAggregateArgs = {
+    /**
+     * Filter which users to aggregate.
+     * 
+    **/
+    where?: usersWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of users to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<usersOrderByInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: usersWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` users from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` users.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned users
+    **/
+    _count?: true | UsersCountAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_count`
+    **/
+    count?: true | UsersCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UsersAvgAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_avg`
+    **/
+    avg?: UsersAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UsersSumAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_sum`
+    **/
+    sum?: UsersSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UsersMinAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_min`
+    **/
+    min?: UsersMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UsersMaxAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_max`
+    **/
+    max?: UsersMaxAggregateInputType
+  }
+
+  export type GetUsersAggregateType<T extends UsersAggregateArgs> = {
+        [P in keyof T & keyof AggregateUsers]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUsers[P]>
+      : GetScalarType<T[P], AggregateUsers[P]>
+  }
+
+
+    
+    
+  export type UsersGroupByArgs = {
+    where?: usersWhereInput
+    orderBy?: Enumerable<usersOrderByInput>
+    by: Array<UsersScalarFieldEnum>
+    having?: usersScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UsersCountAggregateInputType | true
+    _avg?: UsersAvgAggregateInputType
+    _sum?: UsersSumAggregateInputType
+    _min?: UsersMinAggregateInputType
+    _max?: UsersMaxAggregateInputType
+  }
+
+
+  export type UsersGroupByOutputType = {
+    id: number
+    username: string | null
+    hash: string | null
+    email: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    _count: UsersCountAggregateOutputType | null
+    _avg: UsersAvgAggregateOutputType | null
+    _sum: UsersSumAggregateOutputType | null
+    _min: UsersMinAggregateOutputType | null
+    _max: UsersMaxAggregateOutputType | null
+  }
+
+  type GetUsersGroupByPayload<T extends UsersGroupByArgs> = Promise<
+    Array<
+      PickArray<UsersGroupByOutputType, T['by']> & 
+        {
+          [P in ((keyof T) & (keyof UsersGroupByOutputType))]: P extends '_count' 
+            ? T[P] extends boolean 
+              ? number 
+              : GetScalarType<T[P], UsersGroupByOutputType[P]> 
+            : GetScalarType<T[P], UsersGroupByOutputType[P]>
+        }
+      > 
+    >
+
+
+  export type usersSelect = {
+    id?: boolean
+    username?: boolean
+    hash?: boolean
+    email?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type usersGetPayload<
+    S extends boolean | null | undefined | usersArgs,
+    U = keyof S
+      > = S extends true
+        ? users
+    : S extends undefined
+    ? never
+    : S extends usersArgs | usersFindManyArgs
+    ?'include' extends U
+    ? users 
+    : 'select' extends U
+    ? {
+    [P in TrueKeys<S['select']>]: P extends keyof users ?users [P]
+  : 
+     never
+  } 
+    : users
+  : users
+
+
+  type usersCountArgs = Merge<
+    Omit<usersFindManyArgs, 'select' | 'include'> & {
+      select?: UsersCountAggregateInputType | true
+    }
+  >
+
+  export interface usersDelegate<GlobalRejectSettings> {
+    /**
+     * Find zero or one Users that matches the filter.
+     * @param {usersFindUniqueArgs} args - Arguments to find a Users
+     * @example
+     * // Get one Users
+     * const users = await prisma.users.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends usersFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, usersFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'users'> extends True ? CheckSelect<T, Prisma__usersClient<users>, Prisma__usersClient<usersGetPayload<T>>> : CheckSelect<T, Prisma__usersClient<users | null >, Prisma__usersClient<usersGetPayload<T> | null >>
+
+    /**
+     * Find the first Users that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {usersFindFirstArgs} args - Arguments to find a Users
+     * @example
+     * // Get one Users
+     * const users = await prisma.users.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends usersFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, usersFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'users'> extends True ? CheckSelect<T, Prisma__usersClient<users>, Prisma__usersClient<usersGetPayload<T>>> : CheckSelect<T, Prisma__usersClient<users | null >, Prisma__usersClient<usersGetPayload<T> | null >>
+
+    /**
+     * Find zero or more Users that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {usersFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Users
+     * const users = await prisma.users.findMany()
+     * 
+     * // Get first 10 Users
+     * const users = await prisma.users.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const usersWithIdOnly = await prisma.users.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends usersFindManyArgs>(
+      args?: SelectSubset<T, usersFindManyArgs>
+    ): CheckSelect<T, PrismaPromise<Array<users>>, PrismaPromise<Array<usersGetPayload<T>>>>
+
+    /**
+     * Create a Users.
+     * @param {usersCreateArgs} args - Arguments to create a Users.
+     * @example
+     * // Create one Users
+     * const Users = await prisma.users.create({
+     *   data: {
+     *     // ... data to create a Users
+     *   }
+     * })
+     * 
+    **/
+    create<T extends usersCreateArgs>(
+      args: SelectSubset<T, usersCreateArgs>
+    ): CheckSelect<T, Prisma__usersClient<users>, Prisma__usersClient<usersGetPayload<T>>>
+
+    /**
+     * Create many Users.
+     *     @param {usersCreateManyArgs} args - Arguments to create many Users.
+     *     @example
+     *     // Create many Users
+     *     const users = await prisma.users.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends usersCreateManyArgs>(
+      args?: SelectSubset<T, usersCreateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Users.
+     * @param {usersDeleteArgs} args - Arguments to delete one Users.
+     * @example
+     * // Delete one Users
+     * const Users = await prisma.users.delete({
+     *   where: {
+     *     // ... filter to delete one Users
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends usersDeleteArgs>(
+      args: SelectSubset<T, usersDeleteArgs>
+    ): CheckSelect<T, Prisma__usersClient<users>, Prisma__usersClient<usersGetPayload<T>>>
+
+    /**
+     * Update one Users.
+     * @param {usersUpdateArgs} args - Arguments to update one Users.
+     * @example
+     * // Update one Users
+     * const users = await prisma.users.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends usersUpdateArgs>(
+      args: SelectSubset<T, usersUpdateArgs>
+    ): CheckSelect<T, Prisma__usersClient<users>, Prisma__usersClient<usersGetPayload<T>>>
+
+    /**
+     * Delete zero or more Users.
+     * @param {usersDeleteManyArgs} args - Arguments to filter Users to delete.
+     * @example
+     * // Delete a few Users
+     * const { count } = await prisma.users.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends usersDeleteManyArgs>(
+      args?: SelectSubset<T, usersDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Users.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {usersUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Users
+     * const users = await prisma.users.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends usersUpdateManyArgs>(
+      args: SelectSubset<T, usersUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Users.
+     * @param {usersUpsertArgs} args - Arguments to update or create a Users.
+     * @example
+     * // Update or create a Users
+     * const users = await prisma.users.upsert({
+     *   create: {
+     *     // ... data to create a Users
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Users we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends usersUpsertArgs>(
+      args: SelectSubset<T, usersUpsertArgs>
+    ): CheckSelect<T, Prisma__usersClient<users>, Prisma__usersClient<usersGetPayload<T>>>
+
+    /**
+     * Count the number of Users.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {usersCountArgs} args - Arguments to filter Users to count.
+     * @example
+     * // Count the number of Users
+     * const count = await prisma.users.count({
+     *   where: {
+     *     // ... the filter for the Users we want to count
+     *   }
+     * })
+    **/
+    count<T extends usersCountArgs>(
+      args?: Subset<T, usersCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UsersCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Users.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsersAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UsersAggregateArgs>(args: Subset<T, UsersAggregateArgs>): PrismaPromise<GetUsersAggregateType<T>>
+
+    /**
+     * Group by Users.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsersGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UsersGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UsersGroupByArgs['orderBy'] }
+        : { orderBy?: UsersGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UsersGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUsersGroupByPayload<T> : Promise<InputErrors>
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for users.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in 
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__usersClient<T> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+  // Custom InputTypes
+
+  /**
+   * users findUnique
+   */
+  export type usersFindUniqueArgs = {
+    /**
+     * Select specific fields to fetch from the users
+     * 
+    **/
+    select?: usersSelect | null
+    /**
+     * Throw an Error if a users can't be found
+     * 
+    **/
+    rejectOnNotFound?: RejectOnNotFound
+    /**
+     * Filter, which users to fetch.
+     * 
+    **/
+    where: usersWhereUniqueInput
+  }
+
+
+  /**
+   * users findFirst
+   */
+  export type usersFindFirstArgs = {
+    /**
+     * Select specific fields to fetch from the users
+     * 
+    **/
+    select?: usersSelect | null
+    /**
+     * Throw an Error if a users can't be found
+     * 
+    **/
+    rejectOnNotFound?: RejectOnNotFound
+    /**
+     * Filter, which users to fetch.
+     * 
+    **/
+    where?: usersWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of users to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<usersOrderByInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for users.
+     * 
+    **/
+    cursor?: usersWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` users from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` users.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of users.
+     * 
+    **/
+    distinct?: Enumerable<UsersScalarFieldEnum>
+  }
+
+
+  /**
+   * users findMany
+   */
+  export type usersFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the users
+     * 
+    **/
+    select?: usersSelect | null
+    /**
+     * Filter, which users to fetch.
+     * 
+    **/
+    where?: usersWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of users to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<usersOrderByInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing users.
+     * 
+    **/
+    cursor?: usersWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` users from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` users.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<UsersScalarFieldEnum>
+  }
+
+
+  /**
+   * users create
+   */
+  export type usersCreateArgs = {
+    /**
+     * Select specific fields to fetch from the users
+     * 
+    **/
+    select?: usersSelect | null
+    /**
+     * The data needed to create a users.
+     * 
+    **/
+    data: XOR<usersCreateInput, usersUncheckedCreateInput>
+  }
+
+
+  /**
+   * users createMany
+   */
+  export type usersCreateManyArgs = {
+    data: Enumerable<usersCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * users update
+   */
+  export type usersUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the users
+     * 
+    **/
+    select?: usersSelect | null
+    /**
+     * The data needed to update a users.
+     * 
+    **/
+    data: XOR<usersUpdateInput, usersUncheckedUpdateInput>
+    /**
+     * Choose, which users to update.
+     * 
+    **/
+    where: usersWhereUniqueInput
+  }
+
+
+  /**
+   * users updateMany
+   */
+  export type usersUpdateManyArgs = {
+    data: XOR<usersUpdateManyMutationInput, usersUncheckedUpdateManyInput>
+    where?: usersWhereInput
+  }
+
+
+  /**
+   * users upsert
+   */
+  export type usersUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the users
+     * 
+    **/
+    select?: usersSelect | null
+    /**
+     * The filter to search for the users to update in case it exists.
+     * 
+    **/
+    where: usersWhereUniqueInput
+    /**
+     * In case the users found by the `where` argument doesn't exist, create a new users with this data.
+     * 
+    **/
+    create: XOR<usersCreateInput, usersUncheckedCreateInput>
+    /**
+     * In case the users was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<usersUpdateInput, usersUncheckedUpdateInput>
+  }
+
+
+  /**
+   * users delete
+   */
+  export type usersDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the users
+     * 
+    **/
+    select?: usersSelect | null
+    /**
+     * Filter which users to delete.
+     * 
+    **/
+    where: usersWhereUniqueInput
+  }
+
+
+  /**
+   * users deleteMany
+   */
+  export type usersDeleteManyArgs = {
+    where?: usersWhereInput
+  }
+
+
+  /**
+   * users without action
+   */
+  export type usersArgs = {
+    /**
+     * Select specific fields to fetch from the users
+     * 
+    **/
+    select?: usersSelect | null
+  }
+
+
+
+  /**
+   * Model users_outdated_tokens
+   */
+
+
+  export type AggregateUsers_outdated_tokens = {
+    _count: Users_outdated_tokensCountAggregateOutputType | null
+    count: Users_outdated_tokensCountAggregateOutputType | null
+    _avg: Users_outdated_tokensAvgAggregateOutputType | null
+    avg: Users_outdated_tokensAvgAggregateOutputType | null
+    _sum: Users_outdated_tokensSumAggregateOutputType | null
+    sum: Users_outdated_tokensSumAggregateOutputType | null
+    _min: Users_outdated_tokensMinAggregateOutputType | null
+    min: Users_outdated_tokensMinAggregateOutputType | null
+    _max: Users_outdated_tokensMaxAggregateOutputType | null
+    max: Users_outdated_tokensMaxAggregateOutputType | null
+  }
+
+  export type Users_outdated_tokensAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type Users_outdated_tokensSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type Users_outdated_tokensMinAggregateOutputType = {
+    id: number | null
+    token: string | null
+    reason: users_outdated_tokens_reason | null
+  }
+
+  export type Users_outdated_tokensMaxAggregateOutputType = {
+    id: number | null
+    token: string | null
+    reason: users_outdated_tokens_reason | null
+  }
+
+  export type Users_outdated_tokensCountAggregateOutputType = {
+    id: number
+    token: number
+    reason: number
+    _all: number
+  }
+
+
+  export type Users_outdated_tokensAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type Users_outdated_tokensSumAggregateInputType = {
+    id?: true
+  }
+
+  export type Users_outdated_tokensMinAggregateInputType = {
+    id?: true
+    token?: true
+    reason?: true
+  }
+
+  export type Users_outdated_tokensMaxAggregateInputType = {
+    id?: true
+    token?: true
+    reason?: true
+  }
+
+  export type Users_outdated_tokensCountAggregateInputType = {
+    id?: true
+    token?: true
+    reason?: true
+    _all?: true
+  }
+
+  export type Users_outdated_tokensAggregateArgs = {
+    /**
+     * Filter which users_outdated_tokens to aggregate.
+     * 
+    **/
+    where?: users_outdated_tokensWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of users_outdated_tokens to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<users_outdated_tokensOrderByInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: users_outdated_tokensWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` users_outdated_tokens from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` users_outdated_tokens.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned users_outdated_tokens
+    **/
+    _count?: true | Users_outdated_tokensCountAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_count`
+    **/
+    count?: true | Users_outdated_tokensCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Users_outdated_tokensAvgAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_avg`
+    **/
+    avg?: Users_outdated_tokensAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Users_outdated_tokensSumAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_sum`
+    **/
+    sum?: Users_outdated_tokensSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Users_outdated_tokensMinAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_min`
+    **/
+    min?: Users_outdated_tokensMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Users_outdated_tokensMaxAggregateInputType
+    /**
+     * @deprecated since 2.23.0 please use `_max`
+    **/
+    max?: Users_outdated_tokensMaxAggregateInputType
+  }
+
+  export type GetUsers_outdated_tokensAggregateType<T extends Users_outdated_tokensAggregateArgs> = {
+        [P in keyof T & keyof AggregateUsers_outdated_tokens]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUsers_outdated_tokens[P]>
+      : GetScalarType<T[P], AggregateUsers_outdated_tokens[P]>
+  }
+
+
+    
+    
+  export type Users_outdated_tokensGroupByArgs = {
+    where?: users_outdated_tokensWhereInput
+    orderBy?: Enumerable<users_outdated_tokensOrderByInput>
+    by: Array<Users_outdated_tokensScalarFieldEnum>
+    having?: users_outdated_tokensScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Users_outdated_tokensCountAggregateInputType | true
+    _avg?: Users_outdated_tokensAvgAggregateInputType
+    _sum?: Users_outdated_tokensSumAggregateInputType
+    _min?: Users_outdated_tokensMinAggregateInputType
+    _max?: Users_outdated_tokensMaxAggregateInputType
+  }
+
+
+  export type Users_outdated_tokensGroupByOutputType = {
+    id: number
+    token: string | null
+    reason: users_outdated_tokens_reason | null
+    _count: Users_outdated_tokensCountAggregateOutputType | null
+    _avg: Users_outdated_tokensAvgAggregateOutputType | null
+    _sum: Users_outdated_tokensSumAggregateOutputType | null
+    _min: Users_outdated_tokensMinAggregateOutputType | null
+    _max: Users_outdated_tokensMaxAggregateOutputType | null
+  }
+
+  type GetUsers_outdated_tokensGroupByPayload<T extends Users_outdated_tokensGroupByArgs> = Promise<
+    Array<
+      PickArray<Users_outdated_tokensGroupByOutputType, T['by']> & 
+        {
+          [P in ((keyof T) & (keyof Users_outdated_tokensGroupByOutputType))]: P extends '_count' 
+            ? T[P] extends boolean 
+              ? number 
+              : GetScalarType<T[P], Users_outdated_tokensGroupByOutputType[P]> 
+            : GetScalarType<T[P], Users_outdated_tokensGroupByOutputType[P]>
+        }
+      > 
+    >
+
+
+  export type users_outdated_tokensSelect = {
+    id?: boolean
+    token?: boolean
+    reason?: boolean
+  }
+
+  export type users_outdated_tokensGetPayload<
+    S extends boolean | null | undefined | users_outdated_tokensArgs,
+    U = keyof S
+      > = S extends true
+        ? users_outdated_tokens
+    : S extends undefined
+    ? never
+    : S extends users_outdated_tokensArgs | users_outdated_tokensFindManyArgs
+    ?'include' extends U
+    ? users_outdated_tokens 
+    : 'select' extends U
+    ? {
+    [P in TrueKeys<S['select']>]: P extends keyof users_outdated_tokens ?users_outdated_tokens [P]
+  : 
+     never
+  } 
+    : users_outdated_tokens
+  : users_outdated_tokens
+
+
+  type users_outdated_tokensCountArgs = Merge<
+    Omit<users_outdated_tokensFindManyArgs, 'select' | 'include'> & {
+      select?: Users_outdated_tokensCountAggregateInputType | true
+    }
+  >
+
+  export interface users_outdated_tokensDelegate<GlobalRejectSettings> {
+    /**
+     * Find zero or one Users_outdated_tokens that matches the filter.
+     * @param {users_outdated_tokensFindUniqueArgs} args - Arguments to find a Users_outdated_tokens
+     * @example
+     * // Get one Users_outdated_tokens
+     * const users_outdated_tokens = await prisma.users_outdated_tokens.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends users_outdated_tokensFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, users_outdated_tokensFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'users_outdated_tokens'> extends True ? CheckSelect<T, Prisma__users_outdated_tokensClient<users_outdated_tokens>, Prisma__users_outdated_tokensClient<users_outdated_tokensGetPayload<T>>> : CheckSelect<T, Prisma__users_outdated_tokensClient<users_outdated_tokens | null >, Prisma__users_outdated_tokensClient<users_outdated_tokensGetPayload<T> | null >>
+
+    /**
+     * Find the first Users_outdated_tokens that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {users_outdated_tokensFindFirstArgs} args - Arguments to find a Users_outdated_tokens
+     * @example
+     * // Get one Users_outdated_tokens
+     * const users_outdated_tokens = await prisma.users_outdated_tokens.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends users_outdated_tokensFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, users_outdated_tokensFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'users_outdated_tokens'> extends True ? CheckSelect<T, Prisma__users_outdated_tokensClient<users_outdated_tokens>, Prisma__users_outdated_tokensClient<users_outdated_tokensGetPayload<T>>> : CheckSelect<T, Prisma__users_outdated_tokensClient<users_outdated_tokens | null >, Prisma__users_outdated_tokensClient<users_outdated_tokensGetPayload<T> | null >>
+
+    /**
+     * Find zero or more Users_outdated_tokens that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {users_outdated_tokensFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Users_outdated_tokens
+     * const users_outdated_tokens = await prisma.users_outdated_tokens.findMany()
+     * 
+     * // Get first 10 Users_outdated_tokens
+     * const users_outdated_tokens = await prisma.users_outdated_tokens.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const users_outdated_tokensWithIdOnly = await prisma.users_outdated_tokens.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends users_outdated_tokensFindManyArgs>(
+      args?: SelectSubset<T, users_outdated_tokensFindManyArgs>
+    ): CheckSelect<T, PrismaPromise<Array<users_outdated_tokens>>, PrismaPromise<Array<users_outdated_tokensGetPayload<T>>>>
+
+    /**
+     * Create a Users_outdated_tokens.
+     * @param {users_outdated_tokensCreateArgs} args - Arguments to create a Users_outdated_tokens.
+     * @example
+     * // Create one Users_outdated_tokens
+     * const Users_outdated_tokens = await prisma.users_outdated_tokens.create({
+     *   data: {
+     *     // ... data to create a Users_outdated_tokens
+     *   }
+     * })
+     * 
+    **/
+    create<T extends users_outdated_tokensCreateArgs>(
+      args: SelectSubset<T, users_outdated_tokensCreateArgs>
+    ): CheckSelect<T, Prisma__users_outdated_tokensClient<users_outdated_tokens>, Prisma__users_outdated_tokensClient<users_outdated_tokensGetPayload<T>>>
+
+    /**
+     * Create many Users_outdated_tokens.
+     *     @param {users_outdated_tokensCreateManyArgs} args - Arguments to create many Users_outdated_tokens.
+     *     @example
+     *     // Create many Users_outdated_tokens
+     *     const users_outdated_tokens = await prisma.users_outdated_tokens.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends users_outdated_tokensCreateManyArgs>(
+      args?: SelectSubset<T, users_outdated_tokensCreateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Users_outdated_tokens.
+     * @param {users_outdated_tokensDeleteArgs} args - Arguments to delete one Users_outdated_tokens.
+     * @example
+     * // Delete one Users_outdated_tokens
+     * const Users_outdated_tokens = await prisma.users_outdated_tokens.delete({
+     *   where: {
+     *     // ... filter to delete one Users_outdated_tokens
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends users_outdated_tokensDeleteArgs>(
+      args: SelectSubset<T, users_outdated_tokensDeleteArgs>
+    ): CheckSelect<T, Prisma__users_outdated_tokensClient<users_outdated_tokens>, Prisma__users_outdated_tokensClient<users_outdated_tokensGetPayload<T>>>
+
+    /**
+     * Update one Users_outdated_tokens.
+     * @param {users_outdated_tokensUpdateArgs} args - Arguments to update one Users_outdated_tokens.
+     * @example
+     * // Update one Users_outdated_tokens
+     * const users_outdated_tokens = await prisma.users_outdated_tokens.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends users_outdated_tokensUpdateArgs>(
+      args: SelectSubset<T, users_outdated_tokensUpdateArgs>
+    ): CheckSelect<T, Prisma__users_outdated_tokensClient<users_outdated_tokens>, Prisma__users_outdated_tokensClient<users_outdated_tokensGetPayload<T>>>
+
+    /**
+     * Delete zero or more Users_outdated_tokens.
+     * @param {users_outdated_tokensDeleteManyArgs} args - Arguments to filter Users_outdated_tokens to delete.
+     * @example
+     * // Delete a few Users_outdated_tokens
+     * const { count } = await prisma.users_outdated_tokens.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends users_outdated_tokensDeleteManyArgs>(
+      args?: SelectSubset<T, users_outdated_tokensDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Users_outdated_tokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {users_outdated_tokensUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Users_outdated_tokens
+     * const users_outdated_tokens = await prisma.users_outdated_tokens.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends users_outdated_tokensUpdateManyArgs>(
+      args: SelectSubset<T, users_outdated_tokensUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Users_outdated_tokens.
+     * @param {users_outdated_tokensUpsertArgs} args - Arguments to update or create a Users_outdated_tokens.
+     * @example
+     * // Update or create a Users_outdated_tokens
+     * const users_outdated_tokens = await prisma.users_outdated_tokens.upsert({
+     *   create: {
+     *     // ... data to create a Users_outdated_tokens
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Users_outdated_tokens we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends users_outdated_tokensUpsertArgs>(
+      args: SelectSubset<T, users_outdated_tokensUpsertArgs>
+    ): CheckSelect<T, Prisma__users_outdated_tokensClient<users_outdated_tokens>, Prisma__users_outdated_tokensClient<users_outdated_tokensGetPayload<T>>>
+
+    /**
+     * Count the number of Users_outdated_tokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {users_outdated_tokensCountArgs} args - Arguments to filter Users_outdated_tokens to count.
+     * @example
+     * // Count the number of Users_outdated_tokens
+     * const count = await prisma.users_outdated_tokens.count({
+     *   where: {
+     *     // ... the filter for the Users_outdated_tokens we want to count
+     *   }
+     * })
+    **/
+    count<T extends users_outdated_tokensCountArgs>(
+      args?: Subset<T, users_outdated_tokensCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Users_outdated_tokensCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Users_outdated_tokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Users_outdated_tokensAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Users_outdated_tokensAggregateArgs>(args: Subset<T, Users_outdated_tokensAggregateArgs>): PrismaPromise<GetUsers_outdated_tokensAggregateType<T>>
+
+    /**
+     * Group by Users_outdated_tokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Users_outdated_tokensGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends Users_outdated_tokensGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: Users_outdated_tokensGroupByArgs['orderBy'] }
+        : { orderBy?: Users_outdated_tokensGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, Users_outdated_tokensGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUsers_outdated_tokensGroupByPayload<T> : Promise<InputErrors>
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for users_outdated_tokens.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in 
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__users_outdated_tokensClient<T> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+  // Custom InputTypes
+
+  /**
+   * users_outdated_tokens findUnique
+   */
+  export type users_outdated_tokensFindUniqueArgs = {
+    /**
+     * Select specific fields to fetch from the users_outdated_tokens
+     * 
+    **/
+    select?: users_outdated_tokensSelect | null
+    /**
+     * Throw an Error if a users_outdated_tokens can't be found
+     * 
+    **/
+    rejectOnNotFound?: RejectOnNotFound
+    /**
+     * Filter, which users_outdated_tokens to fetch.
+     * 
+    **/
+    where: users_outdated_tokensWhereUniqueInput
+  }
+
+
+  /**
+   * users_outdated_tokens findFirst
+   */
+  export type users_outdated_tokensFindFirstArgs = {
+    /**
+     * Select specific fields to fetch from the users_outdated_tokens
+     * 
+    **/
+    select?: users_outdated_tokensSelect | null
+    /**
+     * Throw an Error if a users_outdated_tokens can't be found
+     * 
+    **/
+    rejectOnNotFound?: RejectOnNotFound
+    /**
+     * Filter, which users_outdated_tokens to fetch.
+     * 
+    **/
+    where?: users_outdated_tokensWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of users_outdated_tokens to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<users_outdated_tokensOrderByInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for users_outdated_tokens.
+     * 
+    **/
+    cursor?: users_outdated_tokensWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` users_outdated_tokens from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` users_outdated_tokens.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of users_outdated_tokens.
+     * 
+    **/
+    distinct?: Enumerable<Users_outdated_tokensScalarFieldEnum>
+  }
+
+
+  /**
+   * users_outdated_tokens findMany
+   */
+  export type users_outdated_tokensFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the users_outdated_tokens
+     * 
+    **/
+    select?: users_outdated_tokensSelect | null
+    /**
+     * Filter, which users_outdated_tokens to fetch.
+     * 
+    **/
+    where?: users_outdated_tokensWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of users_outdated_tokens to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<users_outdated_tokensOrderByInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing users_outdated_tokens.
+     * 
+    **/
+    cursor?: users_outdated_tokensWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` users_outdated_tokens from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` users_outdated_tokens.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<Users_outdated_tokensScalarFieldEnum>
+  }
+
+
+  /**
+   * users_outdated_tokens create
+   */
+  export type users_outdated_tokensCreateArgs = {
+    /**
+     * Select specific fields to fetch from the users_outdated_tokens
+     * 
+    **/
+    select?: users_outdated_tokensSelect | null
+    /**
+     * The data needed to create a users_outdated_tokens.
+     * 
+    **/
+    data: XOR<users_outdated_tokensCreateInput, users_outdated_tokensUncheckedCreateInput>
+  }
+
+
+  /**
+   * users_outdated_tokens createMany
+   */
+  export type users_outdated_tokensCreateManyArgs = {
+    data: Enumerable<users_outdated_tokensCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * users_outdated_tokens update
+   */
+  export type users_outdated_tokensUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the users_outdated_tokens
+     * 
+    **/
+    select?: users_outdated_tokensSelect | null
+    /**
+     * The data needed to update a users_outdated_tokens.
+     * 
+    **/
+    data: XOR<users_outdated_tokensUpdateInput, users_outdated_tokensUncheckedUpdateInput>
+    /**
+     * Choose, which users_outdated_tokens to update.
+     * 
+    **/
+    where: users_outdated_tokensWhereUniqueInput
+  }
+
+
+  /**
+   * users_outdated_tokens updateMany
+   */
+  export type users_outdated_tokensUpdateManyArgs = {
+    data: XOR<users_outdated_tokensUpdateManyMutationInput, users_outdated_tokensUncheckedUpdateManyInput>
+    where?: users_outdated_tokensWhereInput
+  }
+
+
+  /**
+   * users_outdated_tokens upsert
+   */
+  export type users_outdated_tokensUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the users_outdated_tokens
+     * 
+    **/
+    select?: users_outdated_tokensSelect | null
+    /**
+     * The filter to search for the users_outdated_tokens to update in case it exists.
+     * 
+    **/
+    where: users_outdated_tokensWhereUniqueInput
+    /**
+     * In case the users_outdated_tokens found by the `where` argument doesn't exist, create a new users_outdated_tokens with this data.
+     * 
+    **/
+    create: XOR<users_outdated_tokensCreateInput, users_outdated_tokensUncheckedCreateInput>
+    /**
+     * In case the users_outdated_tokens was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<users_outdated_tokensUpdateInput, users_outdated_tokensUncheckedUpdateInput>
+  }
+
+
+  /**
+   * users_outdated_tokens delete
+   */
+  export type users_outdated_tokensDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the users_outdated_tokens
+     * 
+    **/
+    select?: users_outdated_tokensSelect | null
+    /**
+     * Filter which users_outdated_tokens to delete.
+     * 
+    **/
+    where: users_outdated_tokensWhereUniqueInput
+  }
+
+
+  /**
+   * users_outdated_tokens deleteMany
+   */
+  export type users_outdated_tokensDeleteManyArgs = {
+    where?: users_outdated_tokensWhereInput
+  }
+
+
+  /**
+   * users_outdated_tokens without action
+   */
+  export type users_outdated_tokensArgs = {
+    /**
+     * Select specific fields to fetch from the users_outdated_tokens
+     * 
+    **/
+    select?: users_outdated_tokensSelect | null
+  }
+
+
+
+  /**
    * Enums
    */
 
@@ -21472,6 +25097,45 @@ export namespace Prisma {
   export type Mca_uiScalarFieldEnum = (typeof Mca_uiScalarFieldEnum)[keyof typeof Mca_uiScalarFieldEnum]
 
 
+  export const Site_post_attachmentsScalarFieldEnum: {
+    id: 'id',
+    post_id: 'post_id',
+    mc_addon_id: 'mc_addon_id'
+  };
+
+  export type Site_post_attachmentsScalarFieldEnum = (typeof Site_post_attachmentsScalarFieldEnum)[keyof typeof Site_post_attachmentsScalarFieldEnum]
+
+
+  export const Site_postsScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    content: 'content'
+  };
+
+  export type Site_postsScalarFieldEnum = (typeof Site_postsScalarFieldEnum)[keyof typeof Site_postsScalarFieldEnum]
+
+
+  export const UsersScalarFieldEnum: {
+    id: 'id',
+    username: 'username',
+    hash: 'hash',
+    email: 'email',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
+
+
+  export const Users_outdated_tokensScalarFieldEnum: {
+    id: 'id',
+    token: 'token',
+    reason: 'reason'
+  };
+
+  export type Users_outdated_tokensScalarFieldEnum = (typeof Users_outdated_tokensScalarFieldEnum)[keyof typeof Users_outdated_tokensScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -21516,6 +25180,7 @@ export namespace Prisma {
     mca_textures?: Mca_texturesListRelationFilter
     mca_trading?: Mca_tradingListRelationFilter
     mca_ui?: Mca_uiListRelationFilter
+    site_post_attachments?: Site_post_attachmentsListRelationFilter
   }
 
   export type mc_addonsOrderByInput = {
@@ -22212,6 +25877,130 @@ export namespace Prisma {
     filepath?: StringNullableWithAggregatesFilter | string | null
   }
 
+  export type site_post_attachmentsWhereInput = {
+    AND?: Enumerable<site_post_attachmentsWhereInput>
+    OR?: Enumerable<site_post_attachmentsWhereInput>
+    NOT?: Enumerable<site_post_attachmentsWhereInput>
+    id?: IntFilter | number
+    post_id?: IntNullableFilter | number | null
+    mc_addon_id?: IntNullableFilter | number | null
+    mc_addons?: XOR<Mc_addonsRelationFilter, mc_addonsWhereInput> | null
+    site_posts?: XOR<Site_postsRelationFilter, site_postsWhereInput> | null
+  }
+
+  export type site_post_attachmentsOrderByInput = {
+    id?: SortOrder
+    post_id?: SortOrder
+    mc_addon_id?: SortOrder
+  }
+
+  export type site_post_attachmentsWhereUniqueInput = {
+    id?: number
+  }
+
+  export type site_post_attachmentsScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<site_post_attachmentsScalarWhereWithAggregatesInput>
+    OR?: Enumerable<site_post_attachmentsScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<site_post_attachmentsScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    post_id?: IntNullableWithAggregatesFilter | number | null
+    mc_addon_id?: IntNullableWithAggregatesFilter | number | null
+  }
+
+  export type site_postsWhereInput = {
+    AND?: Enumerable<site_postsWhereInput>
+    OR?: Enumerable<site_postsWhereInput>
+    NOT?: Enumerable<site_postsWhereInput>
+    id?: IntFilter | number
+    title?: StringNullableFilter | string | null
+    content?: StringNullableFilter | string | null
+    site_post_attachments?: Site_post_attachmentsListRelationFilter
+  }
+
+  export type site_postsOrderByInput = {
+    id?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+  }
+
+  export type site_postsWhereUniqueInput = {
+    id?: number
+  }
+
+  export type site_postsScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<site_postsScalarWhereWithAggregatesInput>
+    OR?: Enumerable<site_postsScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<site_postsScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    title?: StringNullableWithAggregatesFilter | string | null
+    content?: StringNullableWithAggregatesFilter | string | null
+  }
+
+  export type usersWhereInput = {
+    AND?: Enumerable<usersWhereInput>
+    OR?: Enumerable<usersWhereInput>
+    NOT?: Enumerable<usersWhereInput>
+    id?: IntFilter | number
+    username?: StringNullableFilter | string | null
+    hash?: StringNullableFilter | string | null
+    email?: StringNullableFilter | string | null
+    createdAt?: DateTimeNullableFilter | Date | string | null
+    updatedAt?: DateTimeNullableFilter | Date | string | null
+  }
+
+  export type usersOrderByInput = {
+    id?: SortOrder
+    username?: SortOrder
+    hash?: SortOrder
+    email?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type usersWhereUniqueInput = {
+    id?: number
+  }
+
+  export type usersScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<usersScalarWhereWithAggregatesInput>
+    OR?: Enumerable<usersScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<usersScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    username?: StringNullableWithAggregatesFilter | string | null
+    hash?: StringNullableWithAggregatesFilter | string | null
+    email?: StringNullableWithAggregatesFilter | string | null
+    createdAt?: DateTimeNullableWithAggregatesFilter | Date | string | null
+    updatedAt?: DateTimeNullableWithAggregatesFilter | Date | string | null
+  }
+
+  export type users_outdated_tokensWhereInput = {
+    AND?: Enumerable<users_outdated_tokensWhereInput>
+    OR?: Enumerable<users_outdated_tokensWhereInput>
+    NOT?: Enumerable<users_outdated_tokensWhereInput>
+    id?: IntFilter | number
+    token?: StringNullableFilter | string | null
+    reason?: Enumusers_outdated_tokens_reasonNullableFilter | users_outdated_tokens_reason | null
+  }
+
+  export type users_outdated_tokensOrderByInput = {
+    id?: SortOrder
+    token?: SortOrder
+    reason?: SortOrder
+  }
+
+  export type users_outdated_tokensWhereUniqueInput = {
+    id?: number
+  }
+
+  export type users_outdated_tokensScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<users_outdated_tokensScalarWhereWithAggregatesInput>
+    OR?: Enumerable<users_outdated_tokensScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<users_outdated_tokensScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    token?: StringNullableWithAggregatesFilter | string | null
+    reason?: Enumusers_outdated_tokens_reasonNullableWithAggregatesFilter | users_outdated_tokens_reason | null
+  }
+
   export type mc_addonsCreateInput = {
     filepath?: string | null
     folderpath?: string | null
@@ -22239,6 +26028,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateInput = {
@@ -22269,6 +26059,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUpdateInput = {
@@ -22298,6 +26089,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateInput = {
@@ -22328,6 +26120,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateManyInput = {
@@ -23294,6 +27087,186 @@ export namespace Prisma {
     filepath?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type site_post_attachmentsCreateInput = {
+    mc_addons?: mc_addonsCreateNestedOneWithoutSite_post_attachmentsInput
+    site_posts?: site_postsCreateNestedOneWithoutSite_post_attachmentsInput
+  }
+
+  export type site_post_attachmentsUncheckedCreateInput = {
+    id?: number
+    post_id?: number | null
+    mc_addon_id?: number | null
+  }
+
+  export type site_post_attachmentsUpdateInput = {
+    mc_addons?: mc_addonsUpdateOneWithoutSite_post_attachmentsInput
+    site_posts?: site_postsUpdateOneWithoutSite_post_attachmentsInput
+  }
+
+  export type site_post_attachmentsUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    post_id?: NullableIntFieldUpdateOperationsInput | number | null
+    mc_addon_id?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type site_post_attachmentsCreateManyInput = {
+    id?: number
+    post_id?: number | null
+    mc_addon_id?: number | null
+  }
+
+  export type site_post_attachmentsUpdateManyMutationInput = {
+
+  }
+
+  export type site_post_attachmentsUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    post_id?: NullableIntFieldUpdateOperationsInput | number | null
+    mc_addon_id?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type site_postsCreateInput = {
+    title?: string | null
+    content?: string | null
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutSite_postsInput
+  }
+
+  export type site_postsUncheckedCreateInput = {
+    id?: number
+    title?: string | null
+    content?: string | null
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutSite_postsInput
+  }
+
+  export type site_postsUpdateInput = {
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutSite_postsInput
+  }
+
+  export type site_postsUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutSite_postsInput
+  }
+
+  export type site_postsCreateManyInput = {
+    id?: number
+    title?: string | null
+    content?: string | null
+  }
+
+  export type site_postsUpdateManyMutationInput = {
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type site_postsUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type usersCreateInput = {
+    username?: string | null
+    hash?: string | null
+    email?: string | null
+    createdAt?: Date | string | null
+    updatedAt?: Date | string | null
+  }
+
+  export type usersUncheckedCreateInput = {
+    id?: number
+    username?: string | null
+    hash?: string | null
+    email?: string | null
+    createdAt?: Date | string | null
+    updatedAt?: Date | string | null
+  }
+
+  export type usersUpdateInput = {
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    hash?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type usersUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    hash?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type usersCreateManyInput = {
+    id?: number
+    username?: string | null
+    hash?: string | null
+    email?: string | null
+    createdAt?: Date | string | null
+    updatedAt?: Date | string | null
+  }
+
+  export type usersUpdateManyMutationInput = {
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    hash?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type usersUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    hash?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type users_outdated_tokensCreateInput = {
+    token?: string | null
+    reason?: users_outdated_tokens_reason | null
+  }
+
+  export type users_outdated_tokensUncheckedCreateInput = {
+    id?: number
+    token?: string | null
+    reason?: users_outdated_tokens_reason | null
+  }
+
+  export type users_outdated_tokensUpdateInput = {
+    token?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableEnumusers_outdated_tokens_reasonFieldUpdateOperationsInput | users_outdated_tokens_reason | null
+  }
+
+  export type users_outdated_tokensUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    token?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableEnumusers_outdated_tokens_reasonFieldUpdateOperationsInput | users_outdated_tokens_reason | null
+  }
+
+  export type users_outdated_tokensCreateManyInput = {
+    id?: number
+    token?: string | null
+    reason?: users_outdated_tokens_reason | null
+  }
+
+  export type users_outdated_tokensUpdateManyMutationInput = {
+    token?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableEnumusers_outdated_tokens_reasonFieldUpdateOperationsInput | users_outdated_tokens_reason | null
+  }
+
+  export type users_outdated_tokensUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    token?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableEnumusers_outdated_tokens_reasonFieldUpdateOperationsInput | users_outdated_tokens_reason | null
+  }
+
   export type IntFilter = {
     equals?: number
     in?: Enumerable<number>
@@ -23456,6 +27429,12 @@ export namespace Prisma {
     none?: mca_uiWhereInput
   }
 
+  export type Site_post_attachmentsListRelationFilter = {
+    every?: site_post_attachmentsWhereInput
+    some?: site_post_attachmentsWhereInput
+    none?: site_post_attachmentsWhereInput
+  }
+
   export type IntWithAggregatesFilter = {
     equals?: number
     in?: Enumerable<number>
@@ -23615,6 +27594,43 @@ export namespace Prisma {
     max?: NestedIntNullableFilter
   }
 
+  export type Site_postsRelationFilter = {
+    is?: site_postsWhereInput | null
+    isNot?: site_postsWhereInput | null
+  }
+
+  export type Enumusers_outdated_tokens_reasonNullableFilter = {
+    equals?: users_outdated_tokens_reason | null
+    in?: Enumerable<users_outdated_tokens_reason> | null
+    notIn?: Enumerable<users_outdated_tokens_reason> | null
+    not?: NestedEnumusers_outdated_tokens_reasonNullableFilter | users_outdated_tokens_reason | null
+  }
+
+  export type Enumusers_outdated_tokens_reasonNullableWithAggregatesFilter = {
+    equals?: users_outdated_tokens_reason | null
+    in?: Enumerable<users_outdated_tokens_reason> | null
+    notIn?: Enumerable<users_outdated_tokens_reason> | null
+    not?: NestedEnumusers_outdated_tokens_reasonNullableWithAggregatesFilter | users_outdated_tokens_reason | null
+    _count?: NestedIntNullableFilter
+    /**
+     * @deprecated since 2.23 because Aggregation keywords got unified to use underscore as prefix to prevent field clashes.
+     * 
+    **/
+    count?: NestedIntNullableFilter
+    _min?: NestedEnumusers_outdated_tokens_reasonNullableFilter
+    /**
+     * @deprecated since 2.23 because Aggregation keywords got unified to use underscore as prefix to prevent field clashes.
+     * 
+    **/
+    min?: NestedEnumusers_outdated_tokens_reasonNullableFilter
+    _max?: NestedEnumusers_outdated_tokens_reasonNullableFilter
+    /**
+     * @deprecated since 2.23 because Aggregation keywords got unified to use underscore as prefix to prevent field clashes.
+     * 
+    **/
+    max?: NestedEnumusers_outdated_tokens_reasonNullableFilter
+  }
+
   export type mc_dependenciesCreateNestedManyWithoutMc_addonsInput = {
     create?: XOR<Enumerable<mc_dependenciesCreateWithoutMc_addonsInput>, Enumerable<mc_dependenciesUncheckedCreateWithoutMc_addonsInput>>
     connectOrCreate?: Enumerable<mc_dependenciesCreateOrConnectWithoutMc_addonsInput>
@@ -23762,6 +27778,13 @@ export namespace Prisma {
     connect?: Enumerable<mca_uiWhereUniqueInput>
   }
 
+  export type site_post_attachmentsCreateNestedManyWithoutMc_addonsInput = {
+    create?: XOR<Enumerable<site_post_attachmentsCreateWithoutMc_addonsInput>, Enumerable<site_post_attachmentsUncheckedCreateWithoutMc_addonsInput>>
+    connectOrCreate?: Enumerable<site_post_attachmentsCreateOrConnectWithoutMc_addonsInput>
+    createMany?: site_post_attachmentsCreateManyMc_addonsInputEnvelope
+    connect?: Enumerable<site_post_attachmentsWhereUniqueInput>
+  }
+
   export type mc_dependenciesUncheckedCreateNestedManyWithoutMc_addonsInput = {
     create?: XOR<Enumerable<mc_dependenciesCreateWithoutMc_addonsInput>, Enumerable<mc_dependenciesUncheckedCreateWithoutMc_addonsInput>>
     connectOrCreate?: Enumerable<mc_dependenciesCreateOrConnectWithoutMc_addonsInput>
@@ -23907,6 +27930,13 @@ export namespace Prisma {
     connectOrCreate?: Enumerable<mca_uiCreateOrConnectWithoutMc_addonsInput>
     createMany?: mca_uiCreateManyMc_addonsInputEnvelope
     connect?: Enumerable<mca_uiWhereUniqueInput>
+  }
+
+  export type site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput = {
+    create?: XOR<Enumerable<site_post_attachmentsCreateWithoutMc_addonsInput>, Enumerable<site_post_attachmentsUncheckedCreateWithoutMc_addonsInput>>
+    connectOrCreate?: Enumerable<site_post_attachmentsCreateOrConnectWithoutMc_addonsInput>
+    createMany?: site_post_attachmentsCreateManyMc_addonsInputEnvelope
+    connect?: Enumerable<site_post_attachmentsWhereUniqueInput>
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -24211,6 +28241,20 @@ export namespace Prisma {
     deleteMany?: Enumerable<mca_uiScalarWhereInput>
   }
 
+  export type site_post_attachmentsUpdateManyWithoutMc_addonsInput = {
+    create?: XOR<Enumerable<site_post_attachmentsCreateWithoutMc_addonsInput>, Enumerable<site_post_attachmentsUncheckedCreateWithoutMc_addonsInput>>
+    connectOrCreate?: Enumerable<site_post_attachmentsCreateOrConnectWithoutMc_addonsInput>
+    upsert?: Enumerable<site_post_attachmentsUpsertWithWhereUniqueWithoutMc_addonsInput>
+    createMany?: site_post_attachmentsCreateManyMc_addonsInputEnvelope
+    connect?: Enumerable<site_post_attachmentsWhereUniqueInput>
+    set?: Enumerable<site_post_attachmentsWhereUniqueInput>
+    disconnect?: Enumerable<site_post_attachmentsWhereUniqueInput>
+    delete?: Enumerable<site_post_attachmentsWhereUniqueInput>
+    update?: Enumerable<site_post_attachmentsUpdateWithWhereUniqueWithoutMc_addonsInput>
+    updateMany?: Enumerable<site_post_attachmentsUpdateManyWithWhereWithoutMc_addonsInput>
+    deleteMany?: Enumerable<site_post_attachmentsScalarWhereInput>
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -24511,6 +28555,20 @@ export namespace Prisma {
     update?: Enumerable<mca_uiUpdateWithWhereUniqueWithoutMc_addonsInput>
     updateMany?: Enumerable<mca_uiUpdateManyWithWhereWithoutMc_addonsInput>
     deleteMany?: Enumerable<mca_uiScalarWhereInput>
+  }
+
+  export type site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput = {
+    create?: XOR<Enumerable<site_post_attachmentsCreateWithoutMc_addonsInput>, Enumerable<site_post_attachmentsUncheckedCreateWithoutMc_addonsInput>>
+    connectOrCreate?: Enumerable<site_post_attachmentsCreateOrConnectWithoutMc_addonsInput>
+    upsert?: Enumerable<site_post_attachmentsUpsertWithWhereUniqueWithoutMc_addonsInput>
+    createMany?: site_post_attachmentsCreateManyMc_addonsInputEnvelope
+    connect?: Enumerable<site_post_attachmentsWhereUniqueInput>
+    set?: Enumerable<site_post_attachmentsWhereUniqueInput>
+    disconnect?: Enumerable<site_post_attachmentsWhereUniqueInput>
+    delete?: Enumerable<site_post_attachmentsWhereUniqueInput>
+    update?: Enumerable<site_post_attachmentsUpdateWithWhereUniqueWithoutMc_addonsInput>
+    updateMany?: Enumerable<site_post_attachmentsUpdateManyWithWhereWithoutMc_addonsInput>
+    deleteMany?: Enumerable<site_post_attachmentsScalarWhereInput>
   }
 
   export type mc_addonsCreateNestedOneWithoutMc_dependenciesInput = {
@@ -24857,6 +28915,84 @@ export namespace Prisma {
     update?: XOR<mc_addonsUpdateWithoutMca_uiInput, mc_addonsUncheckedUpdateWithoutMca_uiInput>
   }
 
+  export type mc_addonsCreateNestedOneWithoutSite_post_attachmentsInput = {
+    create?: XOR<mc_addonsCreateWithoutSite_post_attachmentsInput, mc_addonsUncheckedCreateWithoutSite_post_attachmentsInput>
+    connectOrCreate?: mc_addonsCreateOrConnectWithoutSite_post_attachmentsInput
+    connect?: mc_addonsWhereUniqueInput
+  }
+
+  export type site_postsCreateNestedOneWithoutSite_post_attachmentsInput = {
+    create?: XOR<site_postsCreateWithoutSite_post_attachmentsInput, site_postsUncheckedCreateWithoutSite_post_attachmentsInput>
+    connectOrCreate?: site_postsCreateOrConnectWithoutSite_post_attachmentsInput
+    connect?: site_postsWhereUniqueInput
+  }
+
+  export type mc_addonsUpdateOneWithoutSite_post_attachmentsInput = {
+    create?: XOR<mc_addonsCreateWithoutSite_post_attachmentsInput, mc_addonsUncheckedCreateWithoutSite_post_attachmentsInput>
+    connectOrCreate?: mc_addonsCreateOrConnectWithoutSite_post_attachmentsInput
+    upsert?: mc_addonsUpsertWithoutSite_post_attachmentsInput
+    connect?: mc_addonsWhereUniqueInput
+    disconnect?: boolean
+    delete?: boolean
+    update?: XOR<mc_addonsUpdateWithoutSite_post_attachmentsInput, mc_addonsUncheckedUpdateWithoutSite_post_attachmentsInput>
+  }
+
+  export type site_postsUpdateOneWithoutSite_post_attachmentsInput = {
+    create?: XOR<site_postsCreateWithoutSite_post_attachmentsInput, site_postsUncheckedCreateWithoutSite_post_attachmentsInput>
+    connectOrCreate?: site_postsCreateOrConnectWithoutSite_post_attachmentsInput
+    upsert?: site_postsUpsertWithoutSite_post_attachmentsInput
+    connect?: site_postsWhereUniqueInput
+    disconnect?: boolean
+    delete?: boolean
+    update?: XOR<site_postsUpdateWithoutSite_post_attachmentsInput, site_postsUncheckedUpdateWithoutSite_post_attachmentsInput>
+  }
+
+  export type site_post_attachmentsCreateNestedManyWithoutSite_postsInput = {
+    create?: XOR<Enumerable<site_post_attachmentsCreateWithoutSite_postsInput>, Enumerable<site_post_attachmentsUncheckedCreateWithoutSite_postsInput>>
+    connectOrCreate?: Enumerable<site_post_attachmentsCreateOrConnectWithoutSite_postsInput>
+    createMany?: site_post_attachmentsCreateManySite_postsInputEnvelope
+    connect?: Enumerable<site_post_attachmentsWhereUniqueInput>
+  }
+
+  export type site_post_attachmentsUncheckedCreateNestedManyWithoutSite_postsInput = {
+    create?: XOR<Enumerable<site_post_attachmentsCreateWithoutSite_postsInput>, Enumerable<site_post_attachmentsUncheckedCreateWithoutSite_postsInput>>
+    connectOrCreate?: Enumerable<site_post_attachmentsCreateOrConnectWithoutSite_postsInput>
+    createMany?: site_post_attachmentsCreateManySite_postsInputEnvelope
+    connect?: Enumerable<site_post_attachmentsWhereUniqueInput>
+  }
+
+  export type site_post_attachmentsUpdateManyWithoutSite_postsInput = {
+    create?: XOR<Enumerable<site_post_attachmentsCreateWithoutSite_postsInput>, Enumerable<site_post_attachmentsUncheckedCreateWithoutSite_postsInput>>
+    connectOrCreate?: Enumerable<site_post_attachmentsCreateOrConnectWithoutSite_postsInput>
+    upsert?: Enumerable<site_post_attachmentsUpsertWithWhereUniqueWithoutSite_postsInput>
+    createMany?: site_post_attachmentsCreateManySite_postsInputEnvelope
+    connect?: Enumerable<site_post_attachmentsWhereUniqueInput>
+    set?: Enumerable<site_post_attachmentsWhereUniqueInput>
+    disconnect?: Enumerable<site_post_attachmentsWhereUniqueInput>
+    delete?: Enumerable<site_post_attachmentsWhereUniqueInput>
+    update?: Enumerable<site_post_attachmentsUpdateWithWhereUniqueWithoutSite_postsInput>
+    updateMany?: Enumerable<site_post_attachmentsUpdateManyWithWhereWithoutSite_postsInput>
+    deleteMany?: Enumerable<site_post_attachmentsScalarWhereInput>
+  }
+
+  export type site_post_attachmentsUncheckedUpdateManyWithoutSite_postsInput = {
+    create?: XOR<Enumerable<site_post_attachmentsCreateWithoutSite_postsInput>, Enumerable<site_post_attachmentsUncheckedCreateWithoutSite_postsInput>>
+    connectOrCreate?: Enumerable<site_post_attachmentsCreateOrConnectWithoutSite_postsInput>
+    upsert?: Enumerable<site_post_attachmentsUpsertWithWhereUniqueWithoutSite_postsInput>
+    createMany?: site_post_attachmentsCreateManySite_postsInputEnvelope
+    connect?: Enumerable<site_post_attachmentsWhereUniqueInput>
+    set?: Enumerable<site_post_attachmentsWhereUniqueInput>
+    disconnect?: Enumerable<site_post_attachmentsWhereUniqueInput>
+    delete?: Enumerable<site_post_attachmentsWhereUniqueInput>
+    update?: Enumerable<site_post_attachmentsUpdateWithWhereUniqueWithoutSite_postsInput>
+    updateMany?: Enumerable<site_post_attachmentsUpdateManyWithWhereWithoutSite_postsInput>
+    deleteMany?: Enumerable<site_post_attachmentsScalarWhereInput>
+  }
+
+  export type NullableEnumusers_outdated_tokens_reasonFieldUpdateOperationsInput = {
+    set?: users_outdated_tokens_reason | null
+  }
+
   export type NestedIntFilter = {
     equals?: number
     in?: Enumerable<number>
@@ -25067,6 +29203,38 @@ export namespace Prisma {
     gt?: number
     gte?: number
     not?: NestedFloatNullableFilter | number | null
+  }
+
+  export type NestedEnumusers_outdated_tokens_reasonNullableFilter = {
+    equals?: users_outdated_tokens_reason | null
+    in?: Enumerable<users_outdated_tokens_reason> | null
+    notIn?: Enumerable<users_outdated_tokens_reason> | null
+    not?: NestedEnumusers_outdated_tokens_reasonNullableFilter | users_outdated_tokens_reason | null
+  }
+
+  export type NestedEnumusers_outdated_tokens_reasonNullableWithAggregatesFilter = {
+    equals?: users_outdated_tokens_reason | null
+    in?: Enumerable<users_outdated_tokens_reason> | null
+    notIn?: Enumerable<users_outdated_tokens_reason> | null
+    not?: NestedEnumusers_outdated_tokens_reasonNullableWithAggregatesFilter | users_outdated_tokens_reason | null
+    _count?: NestedIntNullableFilter
+    /**
+     * @deprecated since 2.23 because Aggregation keywords got unified to use underscore as prefix to prevent field clashes.
+     * 
+    **/
+    count?: NestedIntNullableFilter
+    _min?: NestedEnumusers_outdated_tokens_reasonNullableFilter
+    /**
+     * @deprecated since 2.23 because Aggregation keywords got unified to use underscore as prefix to prevent field clashes.
+     * 
+    **/
+    min?: NestedEnumusers_outdated_tokens_reasonNullableFilter
+    _max?: NestedEnumusers_outdated_tokens_reasonNullableFilter
+    /**
+     * @deprecated since 2.23 because Aggregation keywords got unified to use underscore as prefix to prevent field clashes.
+     * 
+    **/
+    max?: NestedEnumusers_outdated_tokens_reasonNullableFilter
   }
 
   export type mc_dependenciesCreateWithoutMc_addonsInput = {
@@ -25505,6 +29673,25 @@ export namespace Prisma {
 
   export type mca_uiCreateManyMc_addonsInputEnvelope = {
     data: Enumerable<mca_uiCreateManyMc_addonsInput>
+    skipDuplicates?: boolean
+  }
+
+  export type site_post_attachmentsCreateWithoutMc_addonsInput = {
+    site_posts?: site_postsCreateNestedOneWithoutSite_post_attachmentsInput
+  }
+
+  export type site_post_attachmentsUncheckedCreateWithoutMc_addonsInput = {
+    id?: number
+    post_id?: number | null
+  }
+
+  export type site_post_attachmentsCreateOrConnectWithoutMc_addonsInput = {
+    where: site_post_attachmentsWhereUniqueInput
+    create: XOR<site_post_attachmentsCreateWithoutMc_addonsInput, site_post_attachmentsUncheckedCreateWithoutMc_addonsInput>
+  }
+
+  export type site_post_attachmentsCreateManyMc_addonsInputEnvelope = {
+    data: Enumerable<site_post_attachmentsCreateManyMc_addonsInput>
     skipDuplicates?: boolean
   }
 
@@ -26053,6 +30240,31 @@ export namespace Prisma {
     filepath?: StringNullableFilter | string | null
   }
 
+  export type site_post_attachmentsUpsertWithWhereUniqueWithoutMc_addonsInput = {
+    where: site_post_attachmentsWhereUniqueInput
+    update: XOR<site_post_attachmentsUpdateWithoutMc_addonsInput, site_post_attachmentsUncheckedUpdateWithoutMc_addonsInput>
+    create: XOR<site_post_attachmentsCreateWithoutMc_addonsInput, site_post_attachmentsUncheckedCreateWithoutMc_addonsInput>
+  }
+
+  export type site_post_attachmentsUpdateWithWhereUniqueWithoutMc_addonsInput = {
+    where: site_post_attachmentsWhereUniqueInput
+    data: XOR<site_post_attachmentsUpdateWithoutMc_addonsInput, site_post_attachmentsUncheckedUpdateWithoutMc_addonsInput>
+  }
+
+  export type site_post_attachmentsUpdateManyWithWhereWithoutMc_addonsInput = {
+    where: site_post_attachmentsScalarWhereInput
+    data: XOR<site_post_attachmentsUpdateManyMutationInput, site_post_attachmentsUncheckedUpdateManyWithoutSite_post_attachmentsInput>
+  }
+
+  export type site_post_attachmentsScalarWhereInput = {
+    AND?: Enumerable<site_post_attachmentsScalarWhereInput>
+    OR?: Enumerable<site_post_attachmentsScalarWhereInput>
+    NOT?: Enumerable<site_post_attachmentsScalarWhereInput>
+    id?: IntFilter | number
+    post_id?: IntNullableFilter | number | null
+    mc_addon_id?: IntNullableFilter | number | null
+  }
+
   export type mc_addonsCreateWithoutMc_dependenciesInput = {
     filepath?: string | null
     folderpath?: string | null
@@ -26079,6 +30291,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMc_dependenciesInput = {
@@ -26108,6 +30321,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMc_dependenciesInput = {
@@ -26146,6 +30360,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMc_dependenciesInput = {
@@ -26175,6 +30390,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_animation_controllersInput = {
@@ -26203,6 +30419,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_animation_controllersInput = {
@@ -26232,6 +30449,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_animation_controllersInput = {
@@ -26270,6 +30488,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_animation_controllersInput = {
@@ -26299,6 +30518,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_animationsInput = {
@@ -26327,6 +30547,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_animationsInput = {
@@ -26356,6 +30577,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_animationsInput = {
@@ -26394,6 +30616,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_animationsInput = {
@@ -26423,6 +30646,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_attachablesInput = {
@@ -26451,6 +30675,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_attachablesInput = {
@@ -26480,6 +30705,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_attachablesInput = {
@@ -26518,6 +30744,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_attachablesInput = {
@@ -26547,6 +30774,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_entitiesInput = {
@@ -26575,6 +30803,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_entitiesInput = {
@@ -26604,6 +30833,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_entitiesInput = {
@@ -26642,6 +30872,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_entitiesInput = {
@@ -26671,6 +30902,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_entities_rpInput = {
@@ -26699,6 +30931,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_entities_rpInput = {
@@ -26728,6 +30961,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_entities_rpInput = {
@@ -26766,6 +31000,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_entities_rpInput = {
@@ -26795,6 +31030,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_fogsInput = {
@@ -26823,6 +31059,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_fogsInput = {
@@ -26852,6 +31089,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_fogsInput = {
@@ -26890,6 +31128,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_fogsInput = {
@@ -26919,6 +31158,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_itemsInput = {
@@ -26947,6 +31187,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_itemsInput = {
@@ -26976,6 +31217,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_itemsInput = {
@@ -27014,6 +31256,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_itemsInput = {
@@ -27043,6 +31286,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_loot_tablesInput = {
@@ -27071,6 +31315,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_loot_tablesInput = {
@@ -27100,6 +31345,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_loot_tablesInput = {
@@ -27138,6 +31384,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_loot_tablesInput = {
@@ -27167,6 +31414,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_modelsInput = {
@@ -27195,6 +31443,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_modelsInput = {
@@ -27224,6 +31473,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_modelsInput = {
@@ -27262,6 +31512,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_modelsInput = {
@@ -27291,6 +31542,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_otherInput = {
@@ -27319,6 +31571,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_otherInput = {
@@ -27348,6 +31601,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_otherInput = {
@@ -27386,6 +31640,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_otherInput = {
@@ -27415,6 +31670,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_particlesInput = {
@@ -27443,6 +31699,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_particlesInput = {
@@ -27472,6 +31729,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_particlesInput = {
@@ -27510,6 +31768,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_particlesInput = {
@@ -27539,6 +31798,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_recipesInput = {
@@ -27567,6 +31827,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_recipesInput = {
@@ -27596,6 +31857,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_recipesInput = {
@@ -27634,6 +31896,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_recipesInput = {
@@ -27663,6 +31926,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_render_controllersInput = {
@@ -27691,6 +31955,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_render_controllersInput = {
@@ -27720,6 +31985,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_render_controllersInput = {
@@ -27758,6 +32024,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_render_controllersInput = {
@@ -27787,6 +32054,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_scriptsInput = {
@@ -27815,6 +32083,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_scriptsInput = {
@@ -27844,6 +32113,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_scriptsInput = {
@@ -27882,6 +32152,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_scriptsInput = {
@@ -27911,6 +32182,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_soundsInput = {
@@ -27939,6 +32211,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_soundsInput = {
@@ -27968,6 +32241,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_soundsInput = {
@@ -28006,6 +32280,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_soundsInput = {
@@ -28035,6 +32310,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_spawn_rulesInput = {
@@ -28063,6 +32339,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_spawn_rulesInput = {
@@ -28092,6 +32369,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_spawn_rulesInput = {
@@ -28130,6 +32408,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_spawn_rulesInput = {
@@ -28159,6 +32438,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_textsInput = {
@@ -28187,6 +32467,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_textsInput = {
@@ -28216,6 +32497,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_textsInput = {
@@ -28254,6 +32536,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_textsInput = {
@@ -28283,6 +32566,7 @@ export namespace Prisma {
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_texturesInput = {
@@ -28311,6 +32595,7 @@ export namespace Prisma {
     mca_texts?: mca_textsCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_texturesInput = {
@@ -28340,6 +32625,7 @@ export namespace Prisma {
     mca_texts?: mca_textsUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_texturesInput = {
@@ -28378,6 +32664,7 @@ export namespace Prisma {
     mca_texts?: mca_textsUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_texturesInput = {
@@ -28407,6 +32694,7 @@ export namespace Prisma {
     mca_texts?: mca_textsUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_tradingInput = {
@@ -28435,6 +32723,7 @@ export namespace Prisma {
     mca_texts?: mca_textsCreateNestedManyWithoutMc_addonsInput
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_tradingInput = {
@@ -28464,6 +32753,7 @@ export namespace Prisma {
     mca_texts?: mca_textsUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_tradingInput = {
@@ -28502,6 +32792,7 @@ export namespace Prisma {
     mca_texts?: mca_textsUpdateManyWithoutMc_addonsInput
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_tradingInput = {
@@ -28531,6 +32822,7 @@ export namespace Prisma {
     mca_texts?: mca_textsUncheckedUpdateManyWithoutMc_addonsInput
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateWithoutMca_uiInput = {
@@ -28559,6 +32851,7 @@ export namespace Prisma {
     mca_texts?: mca_textsCreateNestedManyWithoutMc_addonsInput
     mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedCreateWithoutMca_uiInput = {
@@ -28588,6 +32881,7 @@ export namespace Prisma {
     mca_texts?: mca_textsUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedCreateNestedManyWithoutMc_addonsInput
   }
 
   export type mc_addonsCreateOrConnectWithoutMca_uiInput = {
@@ -28626,6 +32920,7 @@ export namespace Prisma {
     mca_texts?: mca_textsUpdateManyWithoutMc_addonsInput
     mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUpdateManyWithoutMc_addonsInput
   }
 
   export type mc_addonsUncheckedUpdateWithoutMca_uiInput = {
@@ -28655,6 +32950,202 @@ export namespace Prisma {
     mca_texts?: mca_textsUncheckedUpdateManyWithoutMc_addonsInput
     mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
     mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
+    site_post_attachments?: site_post_attachmentsUncheckedUpdateManyWithoutMc_addonsInput
+  }
+
+  export type mc_addonsCreateWithoutSite_post_attachmentsInput = {
+    filepath?: string | null
+    folderpath?: string | null
+    uuid?: string | null
+    createdAt?: Date | string | null
+    updatedAt?: Date | string | null
+    mc_dependencies?: mc_dependenciesCreateNestedManyWithoutMc_addonsInput
+    mca_animation_controllers?: mca_animation_controllersCreateNestedManyWithoutMc_addonsInput
+    mca_animations?: mca_animationsCreateNestedManyWithoutMc_addonsInput
+    mca_attachables?: mca_attachablesCreateNestedManyWithoutMc_addonsInput
+    mca_entities?: mca_entitiesCreateNestedManyWithoutMc_addonsInput
+    mca_entities_rp?: mca_entities_rpCreateNestedManyWithoutMc_addonsInput
+    mca_fogs?: mca_fogsCreateNestedManyWithoutMc_addonsInput
+    mca_items?: mca_itemsCreateNestedManyWithoutMc_addonsInput
+    mca_loot_tables?: mca_loot_tablesCreateNestedManyWithoutMc_addonsInput
+    mca_models?: mca_modelsCreateNestedManyWithoutMc_addonsInput
+    mca_other?: mca_otherCreateNestedManyWithoutMc_addonsInput
+    mca_particles?: mca_particlesCreateNestedManyWithoutMc_addonsInput
+    mca_recipes?: mca_recipesCreateNestedManyWithoutMc_addonsInput
+    mca_render_controllers?: mca_render_controllersCreateNestedManyWithoutMc_addonsInput
+    mca_scripts?: mca_scriptsCreateNestedManyWithoutMc_addonsInput
+    mca_sounds?: mca_soundsCreateNestedManyWithoutMc_addonsInput
+    mca_spawn_rules?: mca_spawn_rulesCreateNestedManyWithoutMc_addonsInput
+    mca_texts?: mca_textsCreateNestedManyWithoutMc_addonsInput
+    mca_textures?: mca_texturesCreateNestedManyWithoutMc_addonsInput
+    mca_trading?: mca_tradingCreateNestedManyWithoutMc_addonsInput
+    mca_ui?: mca_uiCreateNestedManyWithoutMc_addonsInput
+  }
+
+  export type mc_addonsUncheckedCreateWithoutSite_post_attachmentsInput = {
+    id?: number
+    filepath?: string | null
+    folderpath?: string | null
+    uuid?: string | null
+    createdAt?: Date | string | null
+    updatedAt?: Date | string | null
+    mc_dependencies?: mc_dependenciesUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_animation_controllers?: mca_animation_controllersUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_animations?: mca_animationsUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_attachables?: mca_attachablesUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_entities?: mca_entitiesUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_entities_rp?: mca_entities_rpUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_fogs?: mca_fogsUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_items?: mca_itemsUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_loot_tables?: mca_loot_tablesUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_models?: mca_modelsUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_other?: mca_otherUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_particles?: mca_particlesUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_recipes?: mca_recipesUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_render_controllers?: mca_render_controllersUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_scripts?: mca_scriptsUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_sounds?: mca_soundsUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_spawn_rules?: mca_spawn_rulesUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_texts?: mca_textsUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_textures?: mca_texturesUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_trading?: mca_tradingUncheckedCreateNestedManyWithoutMc_addonsInput
+    mca_ui?: mca_uiUncheckedCreateNestedManyWithoutMc_addonsInput
+  }
+
+  export type mc_addonsCreateOrConnectWithoutSite_post_attachmentsInput = {
+    where: mc_addonsWhereUniqueInput
+    create: XOR<mc_addonsCreateWithoutSite_post_attachmentsInput, mc_addonsUncheckedCreateWithoutSite_post_attachmentsInput>
+  }
+
+  export type site_postsCreateWithoutSite_post_attachmentsInput = {
+    title?: string | null
+    content?: string | null
+  }
+
+  export type site_postsUncheckedCreateWithoutSite_post_attachmentsInput = {
+    id?: number
+    title?: string | null
+    content?: string | null
+  }
+
+  export type site_postsCreateOrConnectWithoutSite_post_attachmentsInput = {
+    where: site_postsWhereUniqueInput
+    create: XOR<site_postsCreateWithoutSite_post_attachmentsInput, site_postsUncheckedCreateWithoutSite_post_attachmentsInput>
+  }
+
+  export type mc_addonsUpsertWithoutSite_post_attachmentsInput = {
+    update: XOR<mc_addonsUpdateWithoutSite_post_attachmentsInput, mc_addonsUncheckedUpdateWithoutSite_post_attachmentsInput>
+    create: XOR<mc_addonsCreateWithoutSite_post_attachmentsInput, mc_addonsUncheckedCreateWithoutSite_post_attachmentsInput>
+  }
+
+  export type mc_addonsUpdateWithoutSite_post_attachmentsInput = {
+    filepath?: NullableStringFieldUpdateOperationsInput | string | null
+    folderpath?: NullableStringFieldUpdateOperationsInput | string | null
+    uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    mc_dependencies?: mc_dependenciesUpdateManyWithoutMc_addonsInput
+    mca_animation_controllers?: mca_animation_controllersUpdateManyWithoutMc_addonsInput
+    mca_animations?: mca_animationsUpdateManyWithoutMc_addonsInput
+    mca_attachables?: mca_attachablesUpdateManyWithoutMc_addonsInput
+    mca_entities?: mca_entitiesUpdateManyWithoutMc_addonsInput
+    mca_entities_rp?: mca_entities_rpUpdateManyWithoutMc_addonsInput
+    mca_fogs?: mca_fogsUpdateManyWithoutMc_addonsInput
+    mca_items?: mca_itemsUpdateManyWithoutMc_addonsInput
+    mca_loot_tables?: mca_loot_tablesUpdateManyWithoutMc_addonsInput
+    mca_models?: mca_modelsUpdateManyWithoutMc_addonsInput
+    mca_other?: mca_otherUpdateManyWithoutMc_addonsInput
+    mca_particles?: mca_particlesUpdateManyWithoutMc_addonsInput
+    mca_recipes?: mca_recipesUpdateManyWithoutMc_addonsInput
+    mca_render_controllers?: mca_render_controllersUpdateManyWithoutMc_addonsInput
+    mca_scripts?: mca_scriptsUpdateManyWithoutMc_addonsInput
+    mca_sounds?: mca_soundsUpdateManyWithoutMc_addonsInput
+    mca_spawn_rules?: mca_spawn_rulesUpdateManyWithoutMc_addonsInput
+    mca_texts?: mca_textsUpdateManyWithoutMc_addonsInput
+    mca_textures?: mca_texturesUpdateManyWithoutMc_addonsInput
+    mca_trading?: mca_tradingUpdateManyWithoutMc_addonsInput
+    mca_ui?: mca_uiUpdateManyWithoutMc_addonsInput
+  }
+
+  export type mc_addonsUncheckedUpdateWithoutSite_post_attachmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    filepath?: NullableStringFieldUpdateOperationsInput | string | null
+    folderpath?: NullableStringFieldUpdateOperationsInput | string | null
+    uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    mc_dependencies?: mc_dependenciesUncheckedUpdateManyWithoutMc_addonsInput
+    mca_animation_controllers?: mca_animation_controllersUncheckedUpdateManyWithoutMc_addonsInput
+    mca_animations?: mca_animationsUncheckedUpdateManyWithoutMc_addonsInput
+    mca_attachables?: mca_attachablesUncheckedUpdateManyWithoutMc_addonsInput
+    mca_entities?: mca_entitiesUncheckedUpdateManyWithoutMc_addonsInput
+    mca_entities_rp?: mca_entities_rpUncheckedUpdateManyWithoutMc_addonsInput
+    mca_fogs?: mca_fogsUncheckedUpdateManyWithoutMc_addonsInput
+    mca_items?: mca_itemsUncheckedUpdateManyWithoutMc_addonsInput
+    mca_loot_tables?: mca_loot_tablesUncheckedUpdateManyWithoutMc_addonsInput
+    mca_models?: mca_modelsUncheckedUpdateManyWithoutMc_addonsInput
+    mca_other?: mca_otherUncheckedUpdateManyWithoutMc_addonsInput
+    mca_particles?: mca_particlesUncheckedUpdateManyWithoutMc_addonsInput
+    mca_recipes?: mca_recipesUncheckedUpdateManyWithoutMc_addonsInput
+    mca_render_controllers?: mca_render_controllersUncheckedUpdateManyWithoutMc_addonsInput
+    mca_scripts?: mca_scriptsUncheckedUpdateManyWithoutMc_addonsInput
+    mca_sounds?: mca_soundsUncheckedUpdateManyWithoutMc_addonsInput
+    mca_spawn_rules?: mca_spawn_rulesUncheckedUpdateManyWithoutMc_addonsInput
+    mca_texts?: mca_textsUncheckedUpdateManyWithoutMc_addonsInput
+    mca_textures?: mca_texturesUncheckedUpdateManyWithoutMc_addonsInput
+    mca_trading?: mca_tradingUncheckedUpdateManyWithoutMc_addonsInput
+    mca_ui?: mca_uiUncheckedUpdateManyWithoutMc_addonsInput
+  }
+
+  export type site_postsUpsertWithoutSite_post_attachmentsInput = {
+    update: XOR<site_postsUpdateWithoutSite_post_attachmentsInput, site_postsUncheckedUpdateWithoutSite_post_attachmentsInput>
+    create: XOR<site_postsCreateWithoutSite_post_attachmentsInput, site_postsUncheckedCreateWithoutSite_post_attachmentsInput>
+  }
+
+  export type site_postsUpdateWithoutSite_post_attachmentsInput = {
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type site_postsUncheckedUpdateWithoutSite_post_attachmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type site_post_attachmentsCreateWithoutSite_postsInput = {
+    mc_addons?: mc_addonsCreateNestedOneWithoutSite_post_attachmentsInput
+  }
+
+  export type site_post_attachmentsUncheckedCreateWithoutSite_postsInput = {
+    id?: number
+    mc_addon_id?: number | null
+  }
+
+  export type site_post_attachmentsCreateOrConnectWithoutSite_postsInput = {
+    where: site_post_attachmentsWhereUniqueInput
+    create: XOR<site_post_attachmentsCreateWithoutSite_postsInput, site_post_attachmentsUncheckedCreateWithoutSite_postsInput>
+  }
+
+  export type site_post_attachmentsCreateManySite_postsInputEnvelope = {
+    data: Enumerable<site_post_attachmentsCreateManySite_postsInput>
+    skipDuplicates?: boolean
+  }
+
+  export type site_post_attachmentsUpsertWithWhereUniqueWithoutSite_postsInput = {
+    where: site_post_attachmentsWhereUniqueInput
+    update: XOR<site_post_attachmentsUpdateWithoutSite_postsInput, site_post_attachmentsUncheckedUpdateWithoutSite_postsInput>
+    create: XOR<site_post_attachmentsCreateWithoutSite_postsInput, site_post_attachmentsUncheckedCreateWithoutSite_postsInput>
+  }
+
+  export type site_post_attachmentsUpdateWithWhereUniqueWithoutSite_postsInput = {
+    where: site_post_attachmentsWhereUniqueInput
+    data: XOR<site_post_attachmentsUpdateWithoutSite_postsInput, site_post_attachmentsUncheckedUpdateWithoutSite_postsInput>
+  }
+
+  export type site_post_attachmentsUpdateManyWithWhereWithoutSite_postsInput = {
+    where: site_post_attachmentsScalarWhereInput
+    data: XOR<site_post_attachmentsUpdateManyMutationInput, site_post_attachmentsUncheckedUpdateManyWithoutSite_post_attachmentsInput>
   }
 
   export type mc_dependenciesCreateManyMc_addonsInput = {
@@ -28780,6 +33271,11 @@ export namespace Prisma {
     id?: number
     filename?: string | null
     filepath?: string | null
+  }
+
+  export type site_post_attachmentsCreateManyMc_addonsInput = {
+    id?: number
+    post_id?: number | null
   }
 
   export type mc_dependenciesUpdateWithoutMc_addonsInput = {
@@ -29134,6 +33630,34 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     filename?: NullableStringFieldUpdateOperationsInput | string | null
     filepath?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type site_post_attachmentsUpdateWithoutMc_addonsInput = {
+    site_posts?: site_postsUpdateOneWithoutSite_post_attachmentsInput
+  }
+
+  export type site_post_attachmentsUncheckedUpdateWithoutMc_addonsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    post_id?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type site_post_attachmentsUncheckedUpdateManyWithoutSite_post_attachmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    post_id?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type site_post_attachmentsCreateManySite_postsInput = {
+    id?: number
+    mc_addon_id?: number | null
+  }
+
+  export type site_post_attachmentsUpdateWithoutSite_postsInput = {
+    mc_addons?: mc_addonsUpdateOneWithoutSite_post_attachmentsInput
+  }
+
+  export type site_post_attachmentsUncheckedUpdateWithoutSite_postsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    mc_addon_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
 
