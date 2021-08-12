@@ -266,6 +266,8 @@ model site_posts {
   id                    Int                     @id @default(autoincrement())
   title                 String?                 @db.Text
   content               String?                 @db.LongText
+  createdAt             DateTime?               @default(now()) @db.DateTime(0)
+  updatedAt             DateTime?               @default(now()) @db.DateTime(0)
   site_post_attachments site_post_attachments[]
 }
 
