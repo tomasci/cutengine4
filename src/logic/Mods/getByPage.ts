@@ -2,13 +2,14 @@ import express from "express"
 import Response from "../../utils/Response/Response"
 import db from "../../utils/Database/Database"
 import {site_posts} from "../../../prisma/client"
+import Config from "../../utils/Config"
 
 interface Limit {
 	startPoint: number
 	rowsCount: number
 }
 
-const postsPerPage = 2
+const postsPerPage = Config.sitePosts.perPage
 
 async function getByPage(req: express.Request, res: express.Response) {
 	let page = Number(req.params.page)
@@ -55,12 +56,12 @@ function computeLimit(page: number): Limit {
 }
 
 async function computePagesCount(): Promise<number> {
-	let postsCount = await db.site_posts.count()
+	let postsCount = await db.mc_addons.count()
 	return Math.ceil(postsCount / postsPerPage)
 }
 
-async function getPosts(limit: Limit): Promise<site_posts[]> {
-	return db.site_posts.findMany({
+async function getPosts(limit: Limit) {
+	return db.mc_addons.findMany({
 		skip: limit.startPoint,
 		take: limit.rowsCount,
 		orderBy: [
@@ -68,14 +69,23 @@ async function getPosts(limit: Limit): Promise<site_posts[]> {
 				updatedAt: "desc",
 			},
 		],
-		include: {
-			site_post_attachments: {
-				include: {
-					mc_addons: true,
-				},
-			},
-		},
 	})
+	// return db.site_posts.findMany({
+	// 	skip: limit.startPoint,
+	// 	take: limit.rowsCount,
+	// 	orderBy: [
+	// 		{
+	// 			updatedAt: "desc",
+	// 		},
+	// 	],
+	// 	include: {
+	// 		site_post_attachments: {
+	// 			include: {
+	// 				mc_addons: true,
+	// 			},
+	// 		},
+	// 	},
+	// })
 }
 
 export default getByPage

@@ -5,6 +5,7 @@ import dotenv from "dotenv"
 import jwt from "jsonwebtoken"
 import morgan from "morgan"
 import bodyParser from "body-parser"
+import cors from "cors"
 
 import Upload from "./logic/Upload"
 import db from "./utils/Database/Database"
@@ -18,6 +19,9 @@ const port: number = Number(process.env.PORT)
 
 // logger
 app.use(morgan("tiny"))
+
+// cors
+app.use(cors())
 
 // body parser
 app.use(
@@ -34,6 +38,8 @@ app.use(
 		tempFileDir: path.resolve("./uploads/_temp"),
 	})
 )
+
+app.use("/uploads", express.static(path.resolve("./uploads")))
 
 app.use("/users", usersRouter)
 app.use("/mods", modsRouter)

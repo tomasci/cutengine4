@@ -14,6 +14,8 @@ model mc_addons {
   folderpath                String?                     @db.Text
   uuid                      String?                     @db.Text
   pack_name                 String?                     @db.Text
+  pack_description          String?                     @db.Text
+  pack_type                 String?                     @db.Text
   pack_version              String?                     @db.Text
   pack_engine_version       String?                     @db.Text
   createdAt                 DateTime?                   @default(now()) @db.DateTime(0)

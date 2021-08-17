@@ -175,13 +175,36 @@ async function saveAddon(fileName: string, fileHash: string): Promise<number> {
 		return -1
 	}
 
+	// todo: check here for pack.name and if -> get lang
+	let names = {
+		packName: manifest.header.name,
+		packDescription: manifest.header.description,
+	}
+
+	let namesCorrect: boolean = isPackNamesCorrect(
+		names.packName,
+		names.packDescription
+	)
+
+	if (!namesCorrect) {
+		let lang = await getAddonLanguage(fileHash)
+
+		names.packName = lang.find((s) => s.key === "pack.name").value
+
+		names.packDescription = lang.find(
+			(s) => s.key === "pack.description"
+		).value
+	}
+
 	// insert addon itself
 	let mcAddon = await db.mc_addons.create({
 		data: {
 			filepath: fileName,
 			folderpath: fileHash,
 			uuid: manifest.header.uuid,
-			pack_name: manifest.header.name,
+			pack_name: names.packName,
+			pack_description: names.packDescription,
+			pack_type: manifest.modules[0].type,
 			pack_version: manifest.header.version.join("."),
 			pack_engine_version: manifest.header.min_engine_version.join("."),
 		},
@@ -204,6 +227,62 @@ async function saveAddon(fileName: string, fileHash: string): Promise<number> {
 	}
 
 	return mcAddon.id
+}
+
+function isPackNamesCorrect(
+	packName: string,
+	packDescription: string
+): boolean {
+	return !(packName === "pack.name" || packDescription === "pack.description")
+}
+
+async function getAddonLanguage(folderPath: string) {
+	folderPath = path.resolve("./uploads/extracted/" + folderPath)
+	let languages: string = fs.readFileSync(
+		folderPath + "/texts/languages.json",
+		"utf-8"
+	)
+	let languagesJson: string[] = JSON.parse(languages)
+
+	for (let lang of languagesJson) {
+		if (lang === "en_US" || lang === "en_GB") {
+			let readTextFile = fs
+				.readFileSync(folderPath + "/texts/" + lang + ".lang", "utf-8")
+				.split("\r\n")
+
+			let correctLang = []
+
+			for (let line of readTextFile) {
+				let l = line.split("=")
+				correctLang.push({
+					key: l[0],
+					value: l[1],
+				})
+			}
+
+			return correctLang
+		}
+	}
+
+	// else if it is not en_us or en_gb
+	let readTextFile = fs
+		.readFileSync(
+			folderPath + "/texts/" + languagesJson[0] + ".lang",
+			"utf-8"
+		)
+		.split("\r\n")
+
+	let correctLang = []
+
+	for (let line of readTextFile) {
+		let l = line.split("=")
+		correctLang.push({
+			key: l[0],
+			value: l[1],
+		})
+	}
+
+	return correctLang
 }
 
 async function saveFiles(mcAddonID: number, extractedPath: string) {
