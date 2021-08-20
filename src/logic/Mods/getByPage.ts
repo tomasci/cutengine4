@@ -1,7 +1,7 @@
 import express from "express"
 import Response from "../../utils/Response/Response"
 import db from "../../utils/Database/Database"
-import {site_posts} from "../../../prisma/client"
+import {mc_addons, site_posts} from "../../../prisma/client"
 import Config from "../../utils/Config"
 
 interface Limit {
@@ -56,7 +56,11 @@ function computeLimit(page: number): Limit {
 }
 
 async function computePagesCount(): Promise<number> {
-	let postsCount = await db.mc_addons.count()
+	let postsCount = await db.mc_addons.count({
+		where: {
+			isPublished: true,
+		},
+	})
 	return Math.ceil(postsCount / postsPerPage)
 }
 
@@ -69,6 +73,9 @@ async function getPosts(limit: Limit) {
 				updatedAt: "desc",
 			},
 		],
+		where: {
+			isPublished: true,
+		},
 	})
 	// return db.site_posts.findMany({
 	// 	skip: limit.startPoint,

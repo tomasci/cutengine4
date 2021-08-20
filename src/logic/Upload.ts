@@ -8,6 +8,8 @@ import express from "express"
 import {FileArray, UploadedFile} from "express-fileupload"
 import Response from "../utils/Response/Response"
 import db from "../utils/Database/Database"
+import Utils from "../utils/Utils"
+import findInArray from "../utils/Search/FindInArray"
 
 async function Upload(req: express.Request, res: express.Response) {
 	// check for empty files array
@@ -142,7 +144,9 @@ function checkManifest(extractedPath: string): boolean {
 			extractedPath + "/manifest.json",
 			"utf-8"
 		) // is file exists...
-		JSON.parse(manifestFile) // try to read result
+		// console.log(manifestFile)
+		let json = JSON.parse(manifestFile) // try to read result
+		// console.log(json)
 
 		return true
 	} catch (e) {
@@ -187,11 +191,17 @@ async function saveAddon(fileName: string, fileHash: string): Promise<number> {
 	)
 
 	if (!namesCorrect) {
-		let lang = await getAddonLanguage(fileHash)
+		// let lang = await getAddonLanguage(fileHash)
+		let folderPath: string = path.resolve("./uploads/extracted/" + fileHash)
+		let langList: string[] = getLangList(folderPath)
+		let lang: string = findInArray(langList, ["en_US.lang", "en_GB.lang"])
+		let langFile = readFile(folderPath, lang)
+		let parsedFile = parseFile(langFile)
 
-		names.packName = lang.find((s) => s.key === "pack.name").value
+		console.log(parsedFile.find((s) => s.key == "pack.name"))
 
-		names.packDescription = lang.find(
+		names.packName = parsedFile.find((s) => s.key === "pack.name").value
+		names.packDescription = parsedFile.find(
 			(s) => s.key === "pack.description"
 		).value
 	}
@@ -206,7 +216,10 @@ async function saveAddon(fileName: string, fileHash: string): Promise<number> {
 			pack_description: names.packDescription,
 			pack_type: manifest.modules[0].type,
 			pack_version: manifest.header.version.join("."),
-			pack_engine_version: manifest.header.min_engine_version.join("."),
+			pack_engine_version: manifest.header.min_engine_version
+				? manifest.header.min_engine_version.join(".")
+				: "",
+			isPublished: true,
 		},
 	})
 
@@ -236,54 +249,109 @@ function isPackNamesCorrect(
 	return !(packName === "pack.name" || packDescription === "pack.description")
 }
 
-async function getAddonLanguage(folderPath: string) {
-	folderPath = path.resolve("./uploads/extracted/" + folderPath)
-	let languages: string = fs.readFileSync(
-		folderPath + "/texts/languages.json",
-		"utf-8"
-	)
-	let languagesJson: string[] = JSON.parse(languages)
+function getLangList(folderPath: string): string[] {
+	let listOfFiles: string[] = findInDir(folderPath + "/texts", /\.lang$/)
+	let formattedList: string[] = []
 
-	for (let lang of languagesJson) {
-		if (lang === "en_US" || lang === "en_GB") {
-			let readTextFile = fs
-				.readFileSync(folderPath + "/texts/" + lang + ".lang", "utf-8")
-				.split("\r\n")
+	for (let file of listOfFiles) {
+		let f: string[] = file.split("/")
+		formattedList.push(f[f.length - 1])
+	}
 
-			let correctLang = []
+	return formattedList
+}
 
-			for (let line of readTextFile) {
-				let l = line.split("=")
-				correctLang.push({
-					key: l[0],
-					value: l[1],
-				})
-			}
+function readFile(folderPath: string, lang: string) {
+	return fs.readFileSync(folderPath + "/texts/" + lang, "utf-8")
+}
 
-			return correctLang
+function parseFile(fileContent: string) {
+	let lines = fileContent.split(/\r?\n/)
+	let parsed: {key: string; value: string}[] = []
+
+	for (let line of lines) {
+		let kv = line.split("=")
+
+		if (kv[0] && kv[1] && !Utils.isEmpty(kv[0]) && !Utils.isEmpty(kv[1])) {
+			parsed.push({
+				key: kv[0].toString().trim(),
+				value: kv[1].toString().trim(),
+			})
 		}
 	}
 
-	// else if it is not en_us or en_gb
-	let readTextFile = fs
-		.readFileSync(
-			folderPath + "/texts/" + languagesJson[0] + ".lang",
-			"utf-8"
-		)
-		.split("\r\n")
-
-	let correctLang = []
-
-	for (let line of readTextFile) {
-		let l = line.split("=")
-		correctLang.push({
-			key: l[0],
-			value: l[1],
-		})
-	}
-
-	return correctLang
+	return parsed
 }
+
+// async function getAddonLanguage(folderPath: string) {
+// 	folderPath = path.resolve("./uploads/extracted/" + folderPath)
+// 	let languages: string = fs.readFileSync(
+// 		folderPath + "/texts/languages.json",
+// 		"utf-8"
+// 	)
+// 	let languagesJson: string[] = JSON.parse(languages)
+//
+// 	for (let lang of languagesJson) {
+// 		if (lang === "en_US" || lang === "en_GB") {
+// 			let readTextFile = fs
+// 				.readFileSync(folderPath + "/texts/" + lang + ".lang", "utf-8")
+// 				.split("\r\n")
+//
+// 			let correctLang = []
+//
+// 			for (let line of readTextFile) {
+// 				let l = line.split("=")
+//
+// 				if (
+// 					l[0] &&
+// 					l[1] &&
+// 					!Utils.isEmpty(l[0]) &&
+// 					!Utils.isEmpty(l[1])
+// 				) {
+// 					correctLang.push({
+// 						key: l[0],
+// 						value: l[1],
+// 					})
+// 				}
+//
+// 				// correctLang.push({
+// 				// 	key: l[0],
+// 				// 	value: l[1],
+// 				// })
+// 			}
+//
+// 			return correctLang
+// 		}
+// 	}
+//
+// 	// else if it is not en_us or en_gb
+// 	let readTextFile = fs
+// 		.readFileSync(
+// 			folderPath + "/texts/" + languagesJson[0] + ".lang",
+// 			"utf-8"
+// 		)
+// 		.split("\r\n")
+//
+// 	let correctLang = []
+//
+// 	for (let line of readTextFile) {
+// 		let l = line.split("=")
+//
+// 		if (l[0] && l[1] && !Utils.isEmpty(l[0]) && !Utils.isEmpty(l[1])) {
+// 			correctLang.push({
+// 				key: l[0],
+// 				value: l[1],
+// 			})
+// 		}
+//
+// 		// correctLang.push({
+// 		// 	key: l[0],
+// 		// 	value: l[1],
+// 		// })
+// 	}
+//
+// 	return correctLang
+// }
 
 async function saveFiles(mcAddonID: number, extractedPath: string) {
 	// todo: work with db

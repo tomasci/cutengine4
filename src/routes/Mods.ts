@@ -1,7 +1,8 @@
 import express from "express"
-import getMod from "../logic/Mods/getMod"
+// import getMod from "../logic/Mods/getMod"
 import getByPage from "../logic/Mods/getByPage"
 import getAddon from "../logic/Mods/getAddon"
+// import testLang from "../logic/Mods/testLang"
 
 const router = express()
 
@@ -22,5 +23,9 @@ router.get(
 		await getAddon(req, res)
 	}
 )
+
+// router.get("/testLang", async (req: express.Request, res: express.Response) => {
+// 	await testLang(req, res)
+// })
 
 export const modsRouter = router

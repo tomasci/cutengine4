@@ -8,7 +8,7 @@ interface IConfig {
 
 const Config: IConfig = {
 	sitePosts: {
-		perPage: 2,
+		perPage: 5,
 	},
 }
 

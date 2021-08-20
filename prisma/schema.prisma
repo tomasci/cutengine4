@@ -20,6 +20,7 @@ model mc_addons {
   pack_engine_version       String?                     @db.Text
   createdAt                 DateTime?                   @default(now()) @db.DateTime(0)
   updatedAt                 DateTime?                   @default(now()) @db.DateTime(0)
+  isPublished               Boolean?                    @default(false)
   mc_dependencies           mc_dependencies[]
   mca_animation_controllers mca_animation_controllers[]
   mca_animations            mca_animations[]

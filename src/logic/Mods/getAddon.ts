@@ -54,6 +54,7 @@ async function isExists(id: number): Promise<boolean> {
 	let search = await db.mc_addons.count({
 		where: {
 			id: id,
+			isPublished: true,
 		},
 	})
 
