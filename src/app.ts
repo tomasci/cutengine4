@@ -11,6 +11,7 @@ import Upload from "./logic/Upload"
 import db from "./utils/Database/Database"
 import {usersRouter} from "./routes/Users"
 import {modsRouter} from "./routes/Mods"
+import auth from "./utils/Security/Auth"
 
 dotenv.config()
 
@@ -39,27 +40,20 @@ app.use(
 	})
 )
 
+// static
 app.use("/uploads", express.static(path.resolve("./uploads")))
 
+// routes
 app.use("/users", usersRouter)
 app.use("/mods", modsRouter)
 
-app.post("/upload", async (req: express.Request, res: express.Response) => {
-	await Upload(req, res)
-})
-
-// app.get("/mods", async (req: express.Request, res: express.Response) => {
-// 	res.json({
-// 		page: "first",
-// 	})
-// })
-//
-// app.get("/mods/:page", async (req: express.Request, res: express.Response) => {
-// 	// await Mods.getAll()
-// 	res.json({
-// 		page: req.params.page,
-// 	})
-// })
+app.post(
+	"/upload",
+	auth,
+	async (req: express.Request, res: express.Response) => {
+		await Upload(req, res)
+	}
+)
 
 app.get(
 	"/checkDatabase",

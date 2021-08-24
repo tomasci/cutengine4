@@ -68,28 +68,75 @@ async function getAddonWithDeps(id: number) {
 		},
 	})
 
-	let mc_dependenciesList = await db.mc_dependencies.findMany({
+	let mc_dependenciesList = await db.mc_dependencies.findFirst({
 		where: {
-			mca_id: mc_addon.id,
+			OR: [
+				{
+					mca_id: mc_addon.id,
+				},
+				{
+					uuid: mc_addon.uuid,
+				},
+			],
 		},
 	})
 
 	let mc_dependencies = []
-	for (let line of mc_dependenciesList) {
-		let dep = await db.mc_addons.findFirst({
-			where: {
-				uuid: line.uuid,
-				pack_version: mc_addon.pack_version,
-			},
-		})
 
-		mc_dependencies.push(dep)
+	if (mc_dependenciesList) {
+		if (mc_dependenciesList.uuid === mc_addon.uuid) {
+			let dep = await db.mc_addons.findFirst({
+				where: {
+					id: mc_dependenciesList.mca_id,
+					pack_version: mc_addon.pack_version,
+				},
+			})
+			mc_dependencies.push(dep)
+		} else if (mc_dependenciesList.mca_id === mc_addon.id) {
+			let dep = await db.mc_addons.findFirst({
+				where: {
+					uuid: mc_dependenciesList.uuid,
+					pack_version: mc_addon.pack_version,
+				},
+			})
+			mc_dependencies.push(dep)
+		}
 	}
 
 	return {
 		mc_addon,
 		mc_dependencies,
 	}
+
+	//
+	// // console.log(mc_addon)
+	//
+	// let mc_dependenciesList = await db.mc_dependencies.findMany({
+	// 	where: {
+	// 		mca_id: mc_addon.id,
+	// 	},
+	// })
+	//
+	// // console.log(mc_dependenciesList)
+	//
+	// let mc_dependencies = []
+	// for (let line of mc_dependenciesList) {
+	// 	let dep = await db.mc_addons.findFirst({
+	// 		where: {
+	// 			uuid: line.uuid,
+	// 			pack_version: mc_addon.pack_version,
+	// 		},
+	// 	})
+	//
+	// 	mc_dependencies.push(dep)
+	// }
+	//
+	// // console.log(mc_dependencies)
+	//
+	// return {
+	// 	mc_addon,
+	// 	// mc_dependencies,
+	// }
 
 	// return db.site_posts.findUnique({
 	// 	where: {
