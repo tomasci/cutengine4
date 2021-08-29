@@ -12,7 +12,9 @@ async function testLang(req: express.Request, res: express.Response) {
 	let folderHash: string = "1f916255-da9b-4234-881b-7a362639b6b7"
 	// 1f916255-da9b-4234-881b-7a362639b6b7
 	// 44a98d20-f704-41ae-8815-fd34f6371813
-	let folderPath: string = path.resolve(process.env.STATIC_DIR + "/extracted/" + folderHash)
+	let folderPath: string = path.resolve(
+		process.env.STATIC_DIR + "/extracted/" + folderHash
+	)
 	let langList: string[] = getLangList(folderPath)
 	let lang: string = findInArray(langList, ["en_US.lang", "en_GB.lang"])
 	let langFile = readFile(folderPath, lang)

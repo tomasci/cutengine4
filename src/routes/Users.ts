@@ -11,9 +11,15 @@ router.post("/signin", async (req: express.Request, res: express.Response) => {
 	await signIn(req, res)
 })
 
-router.post("/signup", async (req: express.Request, res: express.Response) => {
-	await signUp(req, res)
-})
+router.post(
+	"/signup",
+	auth,
+	async (req: express.Request, res: express.Response) => {
+		await signUp(req, res)
+	}
+)
+
+// signup requires auth because I dont have a need to disable it fully, but also I dont want to allow anyone to create account, but me...
 
 router.get("/me", auth, async (req: express.Request, res: express.Response) => {
 	await getMe(req, res)

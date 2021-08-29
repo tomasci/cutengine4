@@ -28,7 +28,9 @@ async function Upload(req: express.Request, res: express.Response) {
 	let fileExtension: string = file.name.toString().split(".").pop()
 	let fileHash: string = uuid()
 	let fileName: string = fileHash + "." + fileExtension
-	let filePath: string = [path.resolve(process.env.STATIC_DIR + "/source") + "/"].join("")
+	let filePath: string = [
+		path.resolve(process.env.STATIC_DIR + "/source") + "/",
+	].join("")
 
 	// check extension before continue
 	let isExtensionCorrect: boolean = extensionCheck(fileExtension)
@@ -192,7 +194,9 @@ async function saveAddon(fileName: string, fileHash: string): Promise<number> {
 
 	if (!namesCorrect) {
 		// let lang = await getAddonLanguage(fileHash)
-		let folderPath: string = path.resolve(process.env.STATIC_DIR + "/extracted/" + fileHash)
+		let folderPath: string = path.resolve(
+			process.env.STATIC_DIR + "/extracted/" + fileHash
+		)
 		let langList: string[] = getLangList(folderPath)
 		let lang: string = findInArray(langList, ["en_US.lang", "en_GB.lang"])
 		let langFile = readFile(folderPath, lang)
