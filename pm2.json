@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "mc_cutengine4",
+      "script": "npm",
+      "args": "run from-cache"
+    }
+  ]
+}
