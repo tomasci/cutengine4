@@ -9,7 +9,8 @@
 		"start": "npm run cute && npm run build-server && npm run from-cache",
 		"cute": "npx prettier --write .",
 		"build-server": "rm -rf dist && tsc",
-		"build-prisma": "npx prisma introspect && npx prisma generate"
+		"build-prisma": "npx prisma introspect && npx prisma generate",
+		"build": "npm run build-prisma && npm run build-server"
 	},
 	"keywords": [],
 	"author": "",
