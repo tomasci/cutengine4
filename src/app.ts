@@ -36,12 +36,15 @@ app.use(bodyParser.json())
 app.use(
 	fileUpload({
 		useTempFiles: true,
-		tempFileDir: path.resolve("./uploads/_temp"),
+		tempFileDir: path.resolve(process.env.TEMP_FILE_DIR),
 	})
 )
 
 // static
-app.use("/uploads", express.static(path.resolve("./uploads")))
+app.use("/uploads", express.static(path.resolve(process.env.STATIC_DIR)))
+
+console.log(path.resolve(process.env.TEMP_FILE_DIR))
+console.log(path.resolve(process.env.STATIC_DIR))
 
 // routes
 app.use("/users", usersRouter)
