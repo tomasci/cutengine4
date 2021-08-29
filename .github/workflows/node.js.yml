@@ -27,3 +27,9 @@ jobs:
         JWT_EXPIRES: ${{secrets.JWT_EXPIRES}}
         SALT_ROUNDS: ${{secrets.SALT_ROUNDS}}
     - run: pm2 restart pm2.json
+      env:
+        DATABASE_URL: ${{secrets.DATABASE_URL}}
+        PORT: ${{secrets.PORT}}
+        JWT_SECRET: ${{secrets.JWT_SECRET}}
+        JWT_EXPIRES: ${{secrets.JWT_EXPIRES}}
+        SALT_ROUNDS: ${{secrets.SALT_ROUNDS}}
