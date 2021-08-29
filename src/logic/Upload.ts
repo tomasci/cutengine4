@@ -28,7 +28,7 @@ async function Upload(req: express.Request, res: express.Response) {
 	let fileExtension: string = file.name.toString().split(".").pop()
 	let fileHash: string = uuid()
 	let fileName: string = fileHash + "." + fileExtension
-	let filePath: string = [path.resolve("./uploads/source") + "/"].join("")
+	let filePath: string = [path.resolve(process.env.STATIC_DIR + "/source") + "/"].join("")
 
 	// check extension before continue
 	let isExtensionCorrect: boolean = extensionCheck(fileExtension)
@@ -53,7 +53,7 @@ async function Upload(req: express.Request, res: express.Response) {
 		// extract pack after moving but before sending result
 		let zipPath: string = filePath + fileName
 		let extractedPath: string =
-			path.resolve("./uploads/extracted") + "/" + fileHash
+			path.resolve(process.env.STATIC_DIR + "/extracted") + "/" + fileHash
 		let isExtracted: boolean = await extract(zipPath, extractedPath)
 		if (!isExtracted) {
 			clear(zipPath, extractedPath)
@@ -157,7 +157,7 @@ function checkManifest(extractedPath: string): boolean {
 
 async function saveAddon(fileName: string, fileHash: string): Promise<number> {
 	let extractedPath: string =
-		path.resolve("./uploads/extracted") + "/" + fileHash
+		path.resolve(process.env.STATIC_DIR + "/extracted") + "/" + fileHash
 
 	let manifestFile = fs.readFileSync(
 		extractedPath + "/manifest.json",
@@ -192,7 +192,7 @@ async function saveAddon(fileName: string, fileHash: string): Promise<number> {
 
 	if (!namesCorrect) {
 		// let lang = await getAddonLanguage(fileHash)
-		let folderPath: string = path.resolve("./uploads/extracted/" + fileHash)
+		let folderPath: string = path.resolve(process.env.STATIC_DIR + "/extracted/" + fileHash)
 		let langList: string[] = getLangList(folderPath)
 		let lang: string = findInArray(langList, ["en_US.lang", "en_GB.lang"])
 		let langFile = readFile(folderPath, lang)
