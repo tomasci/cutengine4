@@ -36,4 +36,3 @@ jobs:
                   SALT_ROUNDS: ${{secrets.SALT_ROUNDS}}
                   TEMP_FILE_DIR: ${{secrets.TEMP_FILE_DIR}}
                   STATIC_DIR: ${{secrets.STATIC_DIR}}
-
