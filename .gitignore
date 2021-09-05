@@ -3,6 +3,7 @@ dist
 uploads/_temp
 uploads/extracted
 uploads/source
+uploads/og_images
 prisma/client
 
 # Keep environment variables out of version control

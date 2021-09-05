@@ -12,6 +12,7 @@ import db from "./utils/Database/Database"
 import {usersRouter} from "./routes/Users"
 import {modsRouter} from "./routes/Mods"
 import auth from "./utils/Security/Auth"
+import {ogRouter} from "./routes/OpenGraph"
 
 dotenv.config()
 
@@ -49,6 +50,7 @@ console.log(path.resolve(process.env.STATIC_DIR))
 // routes
 app.use("/users", usersRouter)
 app.use("/mods", modsRouter)
+app.use("/og", ogRouter)
 
 app.post(
 	"/upload",
