@@ -1,6 +1,6 @@
-function findInArray(array: any[], query: any[]): string {
-	for (let q of query) {
-		let search = array.includes(q)
+function findInArray<T>(array: T[], query: T[]): T {
+	for (const q of query) {
+		const search = array.includes(q)
 
 		if (search) {
 			return q

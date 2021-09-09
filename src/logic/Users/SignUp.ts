@@ -11,31 +11,36 @@ interface ISignUpData {
 	email: string
 }
 
-const saltRounds: number = Number(process.env.SALT_ROUNDS)
+const saltRounds = Number(process.env.SALT_ROUNDS)
 
-async function signUp(req: express.Request, res: express.Response) {
-	let userData: ISignUpData = req.body
+async function signUp(
+	req: express.Request,
+	res: express.Response
+): Promise<void> {
+	const userData: ISignUpData = req.body
 
-	let empty: boolean = isEmpty(userData)
+	const empty: boolean = isEmpty(userData)
 	if (empty) {
-		return Response(res, {
+		Response(res, {
 			error: true,
 			code: 500,
 			message: "Empty username, password or email. #202131108200410",
 		})
+		return
 	}
 
-	let exists: boolean = await isExists(userData.username)
+	const exists: boolean = await isExists(userData.username)
 	if (exists) {
-		return Response(res, {
+		Response(res, {
 			error: true,
 			code: 500,
 			message:
 				"User with this username is already exists. #202131108200415",
 		})
+		return
 	}
 
-	let user: users = await newUser(
+	const user: users = await newUser(
 		userData.username,
 		userData.password,
 		userData.email
@@ -43,7 +48,7 @@ async function signUp(req: express.Request, res: express.Response) {
 	user.hash = null
 	// because there are no sense to send it back
 
-	return Response(
+	Response(
 		res,
 		{
 			error: false,
@@ -52,6 +57,7 @@ async function signUp(req: express.Request, res: express.Response) {
 			user,
 		}
 	)
+	return
 }
 
 function isEmpty(userData: ISignUpData): boolean {
@@ -63,7 +69,7 @@ function isEmpty(userData: ISignUpData): boolean {
 }
 
 export async function isExists(username: string): Promise<boolean> {
-	let search = await db.users.count({
+	const search = await db.users.count({
 		where: {
 			username: username,
 		},
@@ -77,8 +83,8 @@ async function newUser(
 	password: string,
 	email: string
 ): Promise<users> {
-	let salt: string = await bcrypt.genSalt(saltRounds)
-	let hash: string = await bcrypt.hash(password, salt)
+	const salt: string = await bcrypt.genSalt(saltRounds)
+	const hash: string = await bcrypt.hash(password, salt)
 
 	return db.users.create({
 		data: {

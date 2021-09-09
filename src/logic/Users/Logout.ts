@@ -3,11 +3,14 @@ import db from "../../utils/Database/Database"
 import {users_outdated_tokens} from "../../../prisma/client"
 import Response from "../../utils/Response/Response"
 
-async function logout(req: express.Request, res: express.Response) {
-	let token = req.user.token
-	let save = await saveInDatabase(token)
+async function logout(
+	req: express.Request,
+	res: express.Response
+): Promise<void> {
+	const token = req.user.token
+	const save = await saveInDatabase(token)
 
-	return Response(
+	Response(
 		res,
 		{
 			error: false,
@@ -16,6 +19,7 @@ async function logout(req: express.Request, res: express.Response) {
 			logout: save,
 		}
 	)
+	return
 }
 
 async function saveInDatabase(token: string): Promise<users_outdated_tokens> {

@@ -1,31 +1,37 @@
 import express from "express"
 import Response from "../../utils/Response/Response"
 import db from "../../utils/Database/Database"
-import path from "path"
-import fs from "fs"
-import {site_posts} from "../../../prisma/client"
+// import path from "path"
+// import fs from "fs"
+// import {site_posts} from "../../../prisma/client"
 
-async function getAddon(req: express.Request, res: express.Response) {
-	let addonID = Number(req.params.id)
+async function getAddon(
+	req: express.Request,
+	res: express.Response
+): Promise<void> {
+	const addonID = Number(req.params.id)
+	const isNumber = Boolean(addonID)
 
-	if (!Boolean(addonID)) {
-		return Response(res, {
+	if (!isNumber) {
+		Response(res, {
 			error: true,
 			code: 500,
 			message: "Post ID must be Number. #202131108200300",
 		})
+		return
 	}
 
-	let exists = await isExists(addonID)
+	const exists = await isExists(addonID)
 	if (!exists) {
-		return Response(res, {
+		Response(res, {
 			error: true,
 			code: 404,
 			message: "Not Found. #202131108220400",
 		})
+		return
 	}
 
-	let addon = await getAddonWithDeps(addonID)
+	const addon = await getAddonWithDeps(addonID)
 	// if (
 	// 	addon.mc_addon.pack_name === "pack.name" ||
 	// 	addon.mc_addon.pack_description === "pack.description"
@@ -39,7 +45,7 @@ async function getAddon(req: express.Request, res: express.Response) {
 	// 	).value
 	// }
 
-	return Response(
+	Response(
 		res,
 		{
 			error: false,
@@ -48,10 +54,11 @@ async function getAddon(req: express.Request, res: express.Response) {
 			addon,
 		}
 	)
+	return
 }
 
 async function isExists(id: number): Promise<boolean> {
-	let search = await db.mc_addons.count({
+	const search = await db.mc_addons.count({
 		where: {
 			id: id,
 			isPublished: true,
@@ -62,13 +69,13 @@ async function isExists(id: number): Promise<boolean> {
 }
 
 async function getAddonWithDeps(id: number) {
-	let mc_addon = await db.mc_addons.findUnique({
+	const mc_addon = await db.mc_addons.findUnique({
 		where: {
 			id: id,
 		},
 	})
 
-	let mc_dependenciesList = await db.mc_dependencies.findFirst({
+	const mc_dependenciesList = await db.mc_dependencies.findFirst({
 		where: {
 			OR: [
 				{
@@ -81,11 +88,11 @@ async function getAddonWithDeps(id: number) {
 		},
 	})
 
-	let mc_dependencies = []
+	const mc_dependencies = []
 
 	if (mc_dependenciesList) {
 		if (mc_dependenciesList.uuid === mc_addon.uuid) {
-			let dep = await db.mc_addons.findFirst({
+			const dep = await db.mc_addons.findFirst({
 				where: {
 					id: mc_dependenciesList.mca_id,
 					pack_version: mc_addon.pack_version,
@@ -93,7 +100,7 @@ async function getAddonWithDeps(id: number) {
 			})
 			mc_dependencies.push(dep)
 		} else if (mc_dependenciesList.mca_id === mc_addon.id) {
-			let dep = await db.mc_addons.findFirst({
+			const dep = await db.mc_addons.findFirst({
 				where: {
 					uuid: mc_dependenciesList.uuid,
 					pack_version: mc_addon.pack_version,

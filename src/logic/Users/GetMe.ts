@@ -3,11 +3,14 @@ import db from "../../utils/Database/Database"
 import {users} from "../../../prisma/client"
 import Response from "../../utils/Response/Response"
 
-async function getMe(req: express.Request, res: express.Response) {
-	let userID = Number(req.user.id)
-	let user = await getUser(userID)
+async function getMe(
+	req: express.Request,
+	res: express.Response
+): Promise<void> {
+	const userID = Number(req.user.id)
+	const user = await getUser(userID)
 
-	return Response(
+	Response(
 		res,
 		{
 			error: false,
@@ -16,10 +19,11 @@ async function getMe(req: express.Request, res: express.Response) {
 			user,
 		}
 	)
+	return
 }
 
 async function getUser(id: number): Promise<users> {
-	let user = await db.users.findUnique({
+	const user = await db.users.findUnique({
 		where: {
 			id: id,
 		},

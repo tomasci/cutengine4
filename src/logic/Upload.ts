@@ -11,92 +11,102 @@ import db from "../utils/Database/Database"
 import Utils from "../utils/Utils"
 import findInArray from "../utils/Search/FindInArray"
 
-async function Upload(req: express.Request, res: express.Response) {
+async function Upload(
+	req: express.Request,
+	res: express.Response
+): Promise<void> {
 	// check for empty files array
-	let isEmpty: boolean = emptyFilesCheck(req.files)
+	const isEmpty: boolean = emptyFilesCheck(req.files)
 	if (!isEmpty) {
-		return Response(res, {
+		Response(res, {
 			error: true,
 			code: 400,
 			message: "File was not selected.",
 		})
+		return
 	}
 
 	// not good, but https://github.com/richardgirges/express-fileupload/issues/156
-	let file: UploadedFile = req.files.addon as UploadedFile
+	const file: UploadedFile = req.files.addon as UploadedFile
 	// let fileExtension = mime.extension(file.mimetype) // this is bad, because when .mc* uploaded it is detected as bin.
-	let fileExtension: string = file.name.toString().split(".").pop()
-	let fileHash: string = uuid()
-	let fileName: string = fileHash + "." + fileExtension
-	let filePath: string = [
+	const fileExtension: string = file.name.toString().split(".").pop()
+	const fileHash: string = uuid()
+	const fileName: string = fileHash + "." + fileExtension
+	const filePath: string = [
 		path.resolve(process.env.STATIC_DIR + "/source") + "/",
 	].join("")
 
 	// check extension before continue
-	let isExtensionCorrect: boolean = extensionCheck(fileExtension)
+	const isExtensionCorrect: boolean = extensionCheck(fileExtension)
 	if (!isExtensionCorrect) {
-		return Response(res, {
+		Response(res, {
 			error: true,
 			code: 500,
 			message: "File format error. #202131108200500",
 		})
+		return
 	}
 
 	// move
 	file.mv(filePath + fileName, async (err) => {
 		if (err) {
-			return Response(res, {
+			Response(res, {
 				error: true,
 				code: 500,
 				message: err,
 			})
+			return
 		}
 
 		// extract pack after moving but before sending result
-		let zipPath: string = filePath + fileName
-		let extractedPath: string =
+		const zipPath: string = filePath + fileName
+		const extractedPath: string =
 			path.resolve(process.env.STATIC_DIR + "/extracted") + "/" + fileHash
-		let isExtracted: boolean = await extract(zipPath, extractedPath)
+		const isExtracted: boolean = await extract(zipPath, extractedPath)
 		if (!isExtracted) {
 			clear(zipPath, extractedPath)
 
-			return Response(res, {
+			Response(res, {
 				error: true,
 				code: 500,
 				message: "The archive may be damaged. #202131108200505",
 			})
+			return
 		}
 
 		// if isExtracted is true check manifest here
-		let isManifest: boolean = checkManifest(extractedPath)
+		const isManifest: boolean = checkManifest(extractedPath)
 		if (!isManifest) {
 			clear(zipPath, extractedPath)
 
-			return Response(res, {
+			Response(res, {
 				error: true,
 				code: 500,
 				message: "Bad manifest.",
 			})
+			return
 		}
 
 		// if all "is" is "true" then work with files and DB
-		let mcAddonID: boolean | number = await saveAddon(fileName, fileHash)
+		const mcAddonID: boolean | number = await saveAddon(fileName, fileHash)
 		if (mcAddonID < 0) {
 			clear(zipPath, extractedPath)
 
-			return Response(res, {
+			Response(res, {
 				error: true,
 				code: 500,
 				message:
 					"This addon is already uploaded and saved. #202131108200510",
 			})
+			return
 		}
 
 		// if addon saved - then save all the data
-		let savedFiles = await saveFiles(mcAddonID, extractedPath)
+		// let savedFiles = await saveFiles(mcAddonID, extractedPath)
+		await saveFiles(mcAddonID, extractedPath)
 		// console.log(savedFiles)
 
-		return Response(
+		Response(
 			res,
 			{
 				error: false,
@@ -107,6 +117,7 @@ async function Upload(req: express.Request, res: express.Response) {
 				mcAddonID,
 			}
 		)
+		return
 	})
 }
 
@@ -120,7 +131,7 @@ function emptyFilesCheck(files: FileArray): boolean {
 }
 
 function extensionCheck(fileExtension: string): boolean {
-	let allowed: string[] = ["zip", "mcpack", "mcworld", "mcaddon"]
+	const allowed: string[] = ["zip", "mcpack", "mcworld", "mcaddon"]
 	return !!allowed.find((line) => line === fileExtension)
 }
 
@@ -142,12 +153,13 @@ async function extract(
 
 function checkManifest(extractedPath: string): boolean {
 	try {
-		let manifestFile: string = fs.readFileSync(
+		const manifestFile: string = fs.readFileSync(
 			extractedPath + "/manifest.json",
 			"utf-8"
 		) // is file exists...
 		// console.log(manifestFile)
-		let json = JSON.parse(manifestFile) // try to read result
+		// let json = JSON.parse(manifestFile) // try to read result
+		JSON.parse(manifestFile) // try to read result
 		// console.log(json)
 
 		return true
@@ -158,18 +170,18 @@ function checkManifest(extractedPath: string): boolean {
 }
 
 async function saveAddon(fileName: string, fileHash: string): Promise<number> {
-	let extractedPath: string =
+	const extractedPath: string =
 		path.resolve(process.env.STATIC_DIR + "/extracted") + "/" + fileHash
 
-	let manifestFile = fs.readFileSync(
+	const manifestFile = fs.readFileSync(
 		extractedPath + "/manifest.json",
 		"utf-8"
 	) // is file exists...
 
-	let manifest = JSON.parse(manifestFile) // try to read result
+	const manifest = JSON.parse(manifestFile) // try to read result
 
 	// search for duplicates
-	let search = await db.mc_addons.findMany({
+	const search = await db.mc_addons.findMany({
 		where: {
 			uuid: manifest.header.uuid,
 			pack_version: manifest.header.version.join("."),
@@ -182,25 +194,25 @@ async function saveAddon(fileName: string, fileHash: string): Promise<number> {
 	}
 
 	// todo: check here for pack.name and if -> get lang
-	let names = {
+	const names = {
 		packName: manifest.header.name,
 		packDescription: manifest.header.description,
 	}
 
-	let namesCorrect: boolean = isPackNamesCorrect(
+	const namesCorrect: boolean = isPackNamesCorrect(
 		names.packName,
 		names.packDescription
 	)
 
 	if (!namesCorrect) {
 		// let lang = await getAddonLanguage(fileHash)
-		let folderPath: string = path.resolve(
+		const folderPath: string = path.resolve(
 			process.env.STATIC_DIR + "/extracted/" + fileHash
 		)
-		let langList: string[] = getLangList(folderPath)
-		let lang: string = findInArray(langList, ["en_US.lang", "en_GB.lang"])
-		let langFile = readFile(folderPath, lang)
-		let parsedFile = parseFile(langFile)
+		const langList: string[] = getLangList(folderPath)
+		const lang: string = findInArray(langList, ["en_US.lang", "en_GB.lang"])
+		const langFile = readFile(folderPath, lang)
+		const parsedFile = parseFile(langFile)
 
 		console.log(parsedFile.find((s) => s.key == "pack.name"))
 
@@ -211,7 +223,7 @@ async function saveAddon(fileName: string, fileHash: string): Promise<number> {
 	}
 
 	// insert addon itself
-	let mcAddon = await db.mc_addons.create({
+	const mcAddon = await db.mc_addons.create({
 		data: {
 			filepath: fileName,
 			folderpath: fileHash,
@@ -228,11 +240,11 @@ async function saveAddon(fileName: string, fileHash: string): Promise<number> {
 	})
 
 	// insert all dependencies
-	let dependencies = manifest.dependencies
-	let insertedDepsList = []
+	const dependencies = manifest.dependencies
+	const insertedDepsList = []
 	if (manifest && dependencies && dependencies.length > 0) {
 		for (const dep of dependencies) {
-			let insertedDep = await db.mc_dependencies.create({
+			const insertedDep = await db.mc_dependencies.create({
 				data: {
 					mca_id: mcAddon.id,
 					uuid: dep.uuid,
@@ -254,11 +266,11 @@ function isPackNamesCorrect(
 }
 
 function getLangList(folderPath: string): string[] {
-	let listOfFiles: string[] = findInDir(folderPath + "/texts", /\.lang$/)
-	let formattedList: string[] = []
+	const listOfFiles: string[] = findInDir(folderPath + "/texts", /\.lang$/)
+	const formattedList: string[] = []
 
-	for (let file of listOfFiles) {
-		let f: string[] = file.split("/")
+	for (const file of listOfFiles) {
+		const f: string[] = file.split("/")
 		formattedList.push(f[f.length - 1])
 	}
 
@@ -270,11 +282,11 @@ function readFile(folderPath: string, lang: string) {
 }
 
 function parseFile(fileContent: string) {
-	let lines = fileContent.split(/\r?\n/)
-	let parsed: {key: string; value: string}[] = []
+	const lines = fileContent.split(/\r?\n/)
+	const parsed: {key: string; value: string}[] = []
 
-	for (let line of lines) {
-		let kv = line.split("=")
+	for (const line of lines) {
+		const kv = line.split("=")
 
 		if (kv[0] && kv[1] && !Utils.isEmpty(kv[0]) && !Utils.isEmpty(kv[1])) {
 			parsed.push({
@@ -359,26 +371,26 @@ function parseFile(fileContent: string) {
 
 async function saveFiles(mcAddonID: number, extractedPath: string) {
 	// todo: work with db
-	let fileList: string[] = findInDir(extractedPath, /\.json$/)
+	const fileList: string[] = findInDir(extractedPath, /\.json$/)
 
-	let results = []
+	const results = []
 
-	for (let file of fileList) {
-		let path: string[] = file
+	for (const file of fileList) {
+		const path: string[] = file
 			.toString()
 			.split(extractedPath)
 			.pop()
 			.split("/")
 			.filter(Boolean) // clear [' ', ''] (empty elements)
 
-		let fileName: string = path[path.length - 1]
-		let fileRelativePath: string = path.join("/")
+		const fileName: string = path[path.length - 1]
+		const fileRelativePath: string = path.join("/")
 
 		if (path.length > 1) {
 			// json files in directories
-			let fileType: string = path[0]
+			const fileType: string = path[0]
 
-			let result = await fileSwitcher(
+			const result = await fileSwitcher(
 				mcAddonID,
 				fileType,
 				fileName,
@@ -387,9 +399,9 @@ async function saveFiles(mcAddonID: number, extractedPath: string) {
 			results.push(result)
 		} else {
 			// else -> json files in root, manifest.json for example.
-			let fileType = "other"
+			const fileType = "other"
 
-			let result = await fileSwitcher(
+			const result = await fileSwitcher(
 				mcAddonID,
 				fileType,
 				fileName,

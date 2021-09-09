@@ -9,6 +9,7 @@ interface User {
 }
 
 declare global {
+	// eslint-disable-next-line @typescript-eslint/no-namespace
 	namespace Express {
 		interface Request {
 			user: User
@@ -22,25 +23,26 @@ const auth = async (
 	req: express.Request,
 	res: express.Response,
 	next: NextFunction
-) => {
+): Promise<void> => {
 	const header = req.headers.authorization
 
 	if (header) {
-		let token: string = header.split(" ")[1] // "Bearer a1b2..."
+		const token: string = header.split(" ")[1] // "Bearer a1b2..."
 
 		jwt.verify(token, jwtSecret, async (err, decoded) => {
 			if (err) {
 				console.log("Auth error:", err)
-				return Response(res, {
+				Response(res, {
 					error: true,
 					code: 403,
 					message: "Token expired. #202130908231520",
 				})
+				return
 			}
 
 			if (decoded) {
 				try {
-					let findToken: number =
+					const findToken: number =
 						await db.users_outdated_tokens.count({
 							where: {
 								token: token,
@@ -48,23 +50,25 @@ const auth = async (
 						})
 
 					if (findToken > 0) {
-						return Response(res, {
+						Response(res, {
 							error: true,
 							code: 403,
 							message:
 								"Token banned or expired. #202130908231545",
 						})
+						return
 					}
 				} catch (err) {
 					console.log("Auth error:", err)
-					return Response(res, {
+					Response(res, {
 						error: true,
 						code: 403,
 						message: "Some authentication error. #202130908231427",
 					})
+					return
 				}
 
-				let payload = JSON.parse(JSON.stringify(decoded))
+				const payload = JSON.parse(JSON.stringify(decoded))
 				req.user = {
 					id: payload.id,
 					token: token,
@@ -74,11 +78,12 @@ const auth = async (
 			}
 		})
 	} else {
-		return Response(res, {
+		Response(res, {
 			error: true,
 			code: 403,
 			message: "Token must be provided. #202130908231700",
 		})
+		return
 	}
 }
 

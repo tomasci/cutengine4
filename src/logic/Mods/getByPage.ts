@@ -1,7 +1,7 @@
 import express from "express"
 import Response from "../../utils/Response/Response"
 import db from "../../utils/Database/Database"
-import {mc_addons, site_posts} from "../../../prisma/client"
+// import {mc_addons, site_posts} from "../../../prisma/client"
 import Config from "../../utils/Config"
 
 interface Limit {
@@ -11,30 +11,36 @@ interface Limit {
 
 const postsPerPage = Config.sitePosts.perPage
 
-async function getByPage(req: express.Request, res: express.Response) {
-	let page = Number(req.params.page)
+async function getByPage(
+	req: express.Request,
+	res: express.Response
+): Promise<void> {
+	const page = Number(req.params.page)
+	const isNumber = Boolean(page)
 
-	if (!Boolean(page)) {
-		return Response(res, {
+	if (!isNumber) {
+		Response(res, {
 			error: true,
 			code: 500,
 			message: "Page value must be Number. #202131208164400",
 		})
+		return
 	}
 
-	let limit = computeLimit(page)
-	let posts = await getPosts(limit)
-	let pages = await computePagesCount()
+	const limit = computeLimit(page)
+	const posts = await getPosts(limit)
+	const pages = await computePagesCount()
 
 	if (posts.length < 1) {
-		return Response(res, {
+		Response(res, {
 			error: true,
 			code: 404,
 			message: "Page not found. #202131208171300",
 		})
+		return
 	}
 
-	return Response(
+	Response(
 		res,
 		{
 			error: false,
@@ -44,6 +50,7 @@ async function getByPage(req: express.Request, res: express.Response) {
 			pages,
 		}
 	)
+	return
 }
 
 function computeLimit(page: number): Limit {
@@ -56,7 +63,7 @@ function computeLimit(page: number): Limit {
 }
 
 async function computePagesCount(): Promise<number> {
-	let postsCount = await db.mc_addons.count({
+	const postsCount = await db.mc_addons.count({
 		where: {
 			isPublished: true,
 		},

@@ -2,7 +2,7 @@ import express from "express"
 import fileUpload from "express-fileupload"
 import path from "path"
 import dotenv from "dotenv"
-import jwt from "jsonwebtoken"
+// import jwt from "jsonwebtoken"
 import morgan from "morgan"
 import bodyParser from "body-parser"
 import cors from "cors"
@@ -17,7 +17,7 @@ import {ogRouter} from "./routes/OpenGraph"
 dotenv.config()
 
 const app = express()
-const port: number = Number(process.env.PORT)
+const port = Number(process.env.PORT)
 
 // logger
 app.use(morgan("tiny"))
@@ -44,8 +44,8 @@ app.use(
 // static
 app.use("/uploads", express.static(path.resolve(process.env.STATIC_DIR)))
 
-console.log(path.resolve(process.env.TEMP_FILE_DIR))
-console.log(path.resolve(process.env.STATIC_DIR))
+// console.log(path.resolve(process.env.TEMP_FILE_DIR))
+// console.log(path.resolve(process.env.STATIC_DIR))
 
 // routes
 app.use("/users", usersRouter)
@@ -63,7 +63,7 @@ app.post(
 app.get(
 	"/checkDatabase",
 	async (req: express.Request, res: express.Response) => {
-		let version = await db.$queryRaw("SELECT version()")
+		const version = await db.$queryRaw("SELECT version()")
 
 		return res.json({
 			version,
@@ -72,6 +72,8 @@ app.get(
 )
 
 app.listen(port, () => {
+	// eslint-disable-next-line no-console
 	console.log("Cute Engine 4")
+	// eslint-disable-next-line no-console
 	console.log(`Listening at: ${port}`)
 })

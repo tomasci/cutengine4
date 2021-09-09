@@ -6,11 +6,11 @@ interface IStatusResponse {
 	message?: string
 }
 
-function Response(
+function Response<T>(
 	res: express.Response,
 	status: IStatusResponse,
-	data?: Object
-) {
+	data?: T
+): express.Response {
 	return res.status(status.code ? status.code : 200).json({
 		status,
 		data: data ? data : {},

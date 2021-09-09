@@ -12,45 +12,51 @@ interface ISignInData {
 	password: string
 }
 
-async function signIn(req: express.Request, res: express.Response) {
-	let userData: ISignInData = req.body
+async function signIn(
+	req: express.Request,
+	res: express.Response
+): Promise<void> {
+	const userData: ISignInData = req.body
 
-	let empty: boolean = isEmpty(userData)
+	const empty: boolean = isEmpty(userData)
 	if (empty) {
-		return Response(res, {
+		Response(res, {
 			error: true,
 			code: 500,
 			message: "Username or password is empty. #202131108200310",
 		})
+		return
 	}
 
-	let exists: boolean = await isExists(userData.username)
+	const exists: boolean = await isExists(userData.username)
 	if (!exists) {
-		return Response(res, {
+		Response(res, {
 			error: true,
 			code: 500,
 			message: "User does not exist. #202131108200320",
 		})
+		return
 	}
 
-	let credentialsCorrect = await isCredentialsCorrect(
+	const credentialsCorrect = await isCredentialsCorrect(
 		userData.username,
 		userData.password
 	)
 	if (!credentialsCorrect) {
-		return Response(res, {
+		Response(res, {
 			error: true,
 			code: 500,
 			message: "Wrong password. #202131108200400",
 		})
+		return
 	}
 
-	let user = await getUser(userData.username)
-	let token = signToken({
+	const user = await getUser(userData.username)
+	const token = signToken({
 		id: user.id,
 	})
 
-	return Response(
+	Response(
 		res,
 		{
 			error: false,
@@ -60,6 +66,7 @@ async function signIn(req: express.Request, res: express.Response) {
 			token,
 		}
 	)
+	return
 }
 
 function isEmpty(userData: ISignInData): boolean {
@@ -70,7 +77,7 @@ async function isCredentialsCorrect(
 	username: string,
 	password: string
 ): Promise<boolean> {
-	let search = await db.users.findFirst({
+	const search = await db.users.findFirst({
 		where: {
 			username: username,
 		},
@@ -80,7 +87,7 @@ async function isCredentialsCorrect(
 }
 
 async function getUser(username: string): Promise<users> {
-	let user = await db.users.findFirst({
+	const user = await db.users.findFirst({
 		where: {
 			username: username,
 		},

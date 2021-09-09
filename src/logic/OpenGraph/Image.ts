@@ -1,40 +1,52 @@
 import express from "express"
 import Response from "../../utils/Response/Response"
 import path from "path"
-import {Canvas, Image, NodeCanvasRenderingContext2D} from "canvas"
+import {
+	createCanvas,
+	loadImage,
+	Canvas,
+	Image,
+	NodeCanvasRenderingContext2D,
+} from "canvas"
 import db from "../../utils/Database/Database"
 import {mc_addons} from "../../../prisma/client"
 import findInDir from "../../utils/Search/FindInDir"
 import fs from "fs"
 import {Buffer} from "buffer"
 
-const {createCanvas, loadImage} = require("canvas")
+// const {createCanvas, loadImage} = require("canvas")
 
-async function getImage(req: express.Request, res: express.Response) {
-	let ID = Number(req.params.id)
+async function getImage(
+	req: express.Request,
+	res: express.Response
+): Promise<void> {
+	const ID = Number(req.params.id)
+	const isNumber = Boolean(ID)
 
-	if (!Boolean(ID)) {
-		return Response(res, {
+	if (!isNumber) {
+		Response(res, {
 			error: true,
 			code: 500,
 			message: "ID value must be Number. #202130409231100",
 		})
+		return
 	}
 
-	let exists = await isExists(ID)
+	const exists = await isExists(ID)
 	if (!exists) {
-		return Response(res, {
+		Response(res, {
 			error: true,
 			code: 404,
 			message: "Not Found. #202131108220400",
 		})
+		return
 	}
 
-	let dirPath = path.resolve(process.env.STATIC_DIR + "/og_images")
-	let ogImageList = findInDir(dirPath, /\.png$/)
+	const dirPath = path.resolve(process.env.STATIC_DIR + "/og_images")
+	const ogImageList = findInDir(dirPath, /\.png$/)
 
 	if (ogImageList.includes(dirPath + "/" + ID + ".png")) {
-		return Response(
+		Response(
 			res,
 			{
 				error: false,
@@ -43,10 +55,11 @@ async function getImage(req: express.Request, res: express.Response) {
 				image: ID + ".png",
 			}
 		)
+		return
 	}
 
 	// get addon data
-	let addon = await getAddonData(ID)
+	const addon = await getAddonData(ID)
 
 	// create canvas
 	const canvas: Canvas = createCanvas(600 * 4, 315 * 4)
@@ -98,12 +111,12 @@ async function getImage(req: express.Request, res: express.Response) {
 		y: 745,
 	})
 
-	let generatedImageB64 = canvas.toDataURL()
-	let imageData = generatedImageB64.replace(/^data:image\/\w+;base64,/, "")
-	let imageBuffer = Buffer.from(imageData, "base64")
+	const generatedImageB64 = canvas.toDataURL()
+	const imageData = generatedImageB64.replace(/^data:image\/\w+;base64,/, "")
+	const imageBuffer = Buffer.from(imageData, "base64")
 	fs.writeFileSync(dirPath + "/" + ID + ".png", imageBuffer)
 
-	return Response(
+	Response(
 		res,
 		{
 			error: false,
@@ -112,10 +125,11 @@ async function getImage(req: express.Request, res: express.Response) {
 			image: ID + ".png",
 		}
 	)
+	return
 }
 
 async function isExists(id: number): Promise<boolean> {
-	let search = await db.mc_addons.count({
+	const search = await db.mc_addons.count({
 		where: {
 			id: id,
 			isPublished: true,
@@ -196,7 +210,7 @@ async function drawText(
 	ctx.font = style.fontSize + "px " + style.fontFamily // 96px Impact
 
 	if (style.alignedHorizontally) {
-		let textWidth: number = ctx.measureText(text).width
+		const textWidth: number = ctx.measureText(text).width
 		style.x = canvas.width / 2 - textWidth / 2
 	}
 
@@ -219,7 +233,7 @@ async function drawImage(
 	ctx: NodeCanvasRenderingContext2D,
 	imagePath: string,
 	style?: IDrawImageStyle,
-	isBase64: boolean = false
+	isBase64 = false
 ) {
 	style = Object.assign(
 		{},
@@ -236,7 +250,7 @@ async function drawImage(
 		style
 	)
 
-	let staticDir = path.resolve(process.env.STATIC_DIR)
+	const staticDir = path.resolve(process.env.STATIC_DIR)
 
 	let image: Image
 	if (isBase64) {
@@ -257,7 +271,7 @@ async function drawImage(
 
 	// todo: border
 	if (style.border) {
-		let borderStyle = {
+		const borderStyle = {
 			x: style.x - style.borderWeight,
 			y: style.y - style.borderWeight,
 			width: style.width + style.borderWeight * 2,

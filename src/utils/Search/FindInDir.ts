@@ -1,7 +1,11 @@
 import fs from "fs"
 import path from "path"
 
-function findInDir(dir, filter, fileList = []) {
+function findInDir(
+	dir: string,
+	filter: RegExp,
+	fileList: string[] = []
+): string[] {
 	const files = fs.readdirSync(dir)
 
 	files.forEach((file) => {

@@ -1,7 +1,7 @@
 import fs from "fs"
 
 class FileSystem {
-	static deleteFile(path) {
+	static deleteFile(path: string): void {
 		try {
 			fs.unlinkSync(path)
 		} catch (e) {
@@ -9,7 +9,7 @@ class FileSystem {
 		}
 	}
 
-	static deleteFolder(path) {
+	static deleteFolder(path: string): void {
 		try {
 			fs.rmdirSync(path, {
 				recursive: true,
