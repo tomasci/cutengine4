@@ -1,4 +1,4 @@
-import express from "express"
+import express, {NextFunction} from "express"
 import fileUpload from "express-fileupload"
 import path from "path"
 import dotenv from "dotenv"
@@ -55,19 +55,27 @@ app.use("/og", ogRouter)
 app.post(
 	"/upload",
 	auth,
-	async (req: express.Request, res: express.Response) => {
-		await Upload(req, res)
+	async (req: express.Request, res: express.Response, next: NextFunction) => {
+		try {
+			await Upload(req, res)
+		} catch (e) {
+			next(e)
+		}
 	}
 )
 
 app.get(
 	"/checkDatabase",
-	async (req: express.Request, res: express.Response) => {
-		const version = await db.$queryRaw("SELECT version()")
+	async (req: express.Request, res: express.Response, next: NextFunction) => {
+		try {
+			const version = await db.$queryRaw("SELECT version()")
 
-		return res.json({
-			version,
-		})
+			return res.json({
+				version,
+			})
+		} catch (e) {
+			next(e)
+		}
 	}
 )
 
